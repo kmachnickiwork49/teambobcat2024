@@ -35,10 +35,10 @@ public class Pathfinder : MonoBehaviour
                 new Vector3Int(0, -1, 0),
                 new Vector3Int(1, 0, 0),
                 new Vector3Int(-1, 0, 0),
-                new Vector3Int(1, 1, 0),
-                new Vector3Int(1, -1, 0),
-                new Vector3Int(-1, 1, 0),
-                new Vector3Int(-1, -1, 0)
+                // new Vector3Int(1, 1, 0),
+                // new Vector3Int(1, -1, 0),
+                // new Vector3Int(-1, 1, 0),
+                // new Vector3Int(-1, -1, 0)
           };
         for (int x = -range; x <= range; x++) {
             for (int y = -range; y <= range; y++) {
@@ -62,7 +62,9 @@ public class Pathfinder : MonoBehaviour
             routeTiles = GetRoute(tileCoordPosition, chosenTilePosition);
         }
 
-        if (tileCoordPosition.x == routeTiles[routeIdx].x && tileCoordPosition.y == routeTiles[routeIdx].y)
+        if (routeIdx >= routeTiles.Count) return;
+        Vector3 nextTileWorld = tilemap.GetCellCenterWorld(routeTiles[routeIdx]);
+        if (IsCloseTo(nextTileWorld, transform.position))
         {
             routeIdx += 1;
             if (routeIdx >= routeTiles.Count)
@@ -89,7 +91,6 @@ public class Pathfinder : MonoBehaviour
     void GoToSelection()
     {
         selectDone = true;
-        tileCoordPosition = tilemap.WorldToCell(transform.position);
         routeTiles = GetRoute(tileCoordPosition, testTile);
         originalTile = tilemap.GetTile(testTile);
         tilemap.SetTile(testTile, debugTile);
@@ -117,7 +118,6 @@ public class Pathfinder : MonoBehaviour
                 {
                     candidateTiles[tilesLen] = cellPosition;
                     tilesLen += 1;
-                    //Debug.Log(tilesLen);
                 }
             }
         }
@@ -176,5 +176,11 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-
+    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.01f)
+    {
+        Vector2 position2D = new Vector2(position.x, position.y);
+        Vector2 targetPosition2D = new Vector2(targetPosition.x, targetPosition.y);
+        float distance = Vector2.Distance(position2D, targetPosition2D);
+        return distance <= threshold;
+    }
 }
