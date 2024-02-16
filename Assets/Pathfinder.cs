@@ -9,6 +9,9 @@ public class Pathfinder : MonoBehaviour
     [SerializeField] private int range;
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
+    [SerializeField] private Vector3Int testTile;
+    private bool selectDone;
+    private bool selectDone2;
     private TileBase originalTile;
     private Vector3Int chosenTilePosition;
     private Vector3 chosenWorldPosition;
@@ -22,7 +25,8 @@ public class Pathfinder : MonoBehaviour
     private void Start()
     {
         targetChosen = false;
-
+        selectDone = false;
+        selectDone2 = false;
         candidateTiles = new List<Vector3Int>();
         routeTiles = new List<Vector3Int>(); //starts off empty
         directions = new Vector3Int[]
@@ -42,11 +46,17 @@ public class Pathfinder : MonoBehaviour
             }
         }
     }
-
+    
     void Update()
     {
         tileCoordPosition = tilemap.WorldToCell(transform.position);
-        if (!targetChosen) {
+ 
+        if (testTile != null && !selectDone)
+        {
+            GoToSelection();
+
+        }
+        else if (!targetChosen && selectDone2) {
             GetTilesInRange();
             //get route sets routeTiles
             routeTiles = GetRoute(tileCoordPosition, chosenTilePosition);
@@ -57,7 +67,15 @@ public class Pathfinder : MonoBehaviour
             routeIdx += 1;
             if (routeIdx >= routeTiles.Count)
             {
-                tilemap.SetTile(chosenTilePosition, originalTile);
+                if (!selectDone2 && selectDone) //finally reaching testTile destination
+                {
+                    tilemap.SetTile(testTile, originalTile);
+                    selectDone2 = true;
+                }
+                else
+                {
+                    tilemap.SetTile(chosenTilePosition, originalTile);
+                }
                 targetChosen = false;
                 return;
             }
@@ -66,6 +84,15 @@ public class Pathfinder : MonoBehaviour
         Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
 
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+    }
+
+    void GoToSelection()
+    {
+        selectDone = true;
+        tileCoordPosition = tilemap.WorldToCell(transform.position);
+        routeTiles = GetRoute(tileCoordPosition, testTile);
+        originalTile = tilemap.GetTile(testTile);
+        tilemap.SetTile(testTile, debugTile);
     }
 
     void GetTilesInRange()
@@ -148,4 +175,6 @@ public class Pathfinder : MonoBehaviour
         // No path found
         return null;
     }
+
+
 }
