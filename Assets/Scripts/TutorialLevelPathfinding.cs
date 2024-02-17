@@ -56,7 +56,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
     void MoveISO_CARD() {
         // Isometric cardinal direction movement
         intermediateTilePosition = new Vector3Int(chosenTilePosition.x, tileCoordPosition.y, tileCoordPosition.z);
-        intermediateWorldPosition = tilemap.GetCellCenterWorld(intermediateTilePosition);
+        intermediateWorldPosition = tilemap.GetCellCenterWorld(intermediateTilePosition) + new Vector3(0f, -tilemap.cellSize.y / 2f, 0f);
         if (hasHitIntermediate == false) {
             // Intermediate first
             transform.position = Vector3.MoveTowards(transform.position, intermediateWorldPosition, speed * Time.deltaTime);
@@ -102,7 +102,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
 
         chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
         chosenWorldPosition.z = transform.position.z;
-        chosenWorldPosition += new Vector3(0f, tilemap.cellSize.y / 2f, 0f);
+        //chosenWorldPosition += new Vector3(0f, tilemap.cellSize.y / 2f, 0f);
 
         targetChosen = true;
     }
