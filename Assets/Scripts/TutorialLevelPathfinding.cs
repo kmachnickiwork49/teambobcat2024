@@ -20,6 +20,15 @@ public class TutorialLevelPathfinding : MonoBehaviour
     private Vector3 intermediateWorldPosition;
     private bool hasHitIntermediate;
 
+    [SerializeField] private List<SprinklerActivate> my_sprinklers;
+    [SerializeField] private Tilemap secondTilemap;
+    private bool doneClimb;
+    private bool inTreeClimbAnim;
+    private bool inJumpStreetAnim;
+
+    [SerializeField] private Sprite baseSpr;
+    [SerializeField] private Sprite climbSpr;
+
     private void Start()
     {
         targetChosen = false;
@@ -32,28 +41,75 @@ public class TutorialLevelPathfinding : MonoBehaviour
         }
 
         hasHitIntermediate = false;
+        inTreeClimbAnim = false;
+        inJumpStreetAnim = false;
+        doneClimb = false;
     }
 
     void Update()
     {
-        tileCoordPosition = tilemap.WorldToCell(transform.position);
-        if (!targetChosen) {
-            GetTilesInRange();
-	    } 
-	    if (tileCoordPosition.x == chosenTilePosition.x 
-                && tileCoordPosition.y == chosenTilePosition.y
-                && Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01
-                && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
-            tilemap.SetTile(chosenTilePosition, originalTile);
-            targetChosen = false;
-            hasHitIntermediate = false;
-            return;
-	    }
-        //transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, speed * Time.deltaTime);
-        MoveISO_CARD();
+        if (inTreeClimbAnim == false && inJumpStreetAnim == false) {
+            tileCoordPosition = tilemap.WorldToCell(transform.position);
+            //if (doneClimb) { 
+                Debug.Log("xyz: " + tileCoordPosition.x + " " + tileCoordPosition.y + " " + tileCoordPosition.z);
+                Debug.Log("targetChosen: " + targetChosen);
+            //}
+            if (!targetChosen) {
+                GetTilesInRange();
+            } 
+            if (tileCoordPosition.x == chosenTilePosition.x 
+                    && tileCoordPosition.y == chosenTilePosition.y
+                    && Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01
+                    && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
+                tilemap.SetTile(chosenTilePosition, originalTile);
+                targetChosen = false;
+                hasHitIntermediate = false;
+                return;
+            }
+            //transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, speed * Time.deltaTime);
+            MoveISO_CARD();
+
+            if (my_sprinklers != null && doneClimb == false) {
+                bool doSwap = true;
+                foreach (SprinklerActivate sprnk in my_sprinklers) {
+                    doSwap = doSwap && sprnk.getTriggerVal();
+                }
+                if (doSwap == true) {
+                    //tilemap = secondTilemap;
+                    targetChosen = true;
+                    tilemap.SetTile(chosenTilePosition, originalTile);
+                    chosenTilePosition = new Vector3Int(4,0,1);
+                    originalTile = tilemap.GetTile(chosenTilePosition);
+                    chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
+                    if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
+                        inTreeClimbAnim = true;
+                        Debug.Log("enter tree climb");
+                    }
+                }
+            }
+        } else if (inTreeClimbAnim) {
+            //Debug.Log("inTreeClimbAnim");
+            gameObject.GetComponent<SpriteRenderer>().sprite = climbSpr;
+            gameObject.transform.position += new Vector3(0,Time.deltaTime,0);
+            //Debug.Log(gameObject.transform.position.y);
+            if (Mathf.Abs(gameObject.transform.position.y - 4) < 0.01) {
+                Debug.Log("exit tree climb");
+                inTreeClimbAnim = false;
+                targetChosen = false;
+                gameObject.GetComponent<SpriteRenderer>().sprite = baseSpr;
+                tilemap = secondTilemap;
+                doneClimb = true;
+                // 9 5 0 final tile coords
+            }
+        } else if (inJumpStreetAnim) {
+
+        }
     }
 
     void MoveISO_CARD() {
+
+        // INTERMEDIATE SELECTION IS MINOR BUGGED
+
         // Isometric cardinal direction movement
         intermediateTilePosition = new Vector3Int(chosenTilePosition.x, tileCoordPosition.y, tileCoordPosition.z);
         intermediateWorldPosition = tilemap.GetCellCenterWorld(intermediateTilePosition) + new Vector3(0f, -tilemap.cellSize.y / 2f, 0f);
@@ -92,10 +148,15 @@ public class TutorialLevelPathfinding : MonoBehaviour
                 {
                     candidateTiles[tilesLen] = cellPosition;
                     tilesLen += 1;
-                    Debug.Log(tilesLen);
+                    //Debug.Log(tilesLen);
                 }
             }
         }
+        
+        for (int i = 0; i < tilesLen; i++) {
+            Debug.Log(candidateTiles[i]);
+        }
+
         chosenTilePosition = candidateTiles[Random.Range(0, tilesLen)];
         originalTile = tilemap.GetTile(chosenTilePosition);
         tilemap.SetTile(chosenTilePosition, debugTile);
