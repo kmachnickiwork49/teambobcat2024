@@ -33,6 +33,8 @@ public class TutorialLevelPathfinding : MonoBehaviour
     private float prev_time;
     private bool doWait;
 
+    [SerializeField] private TileBase baseOfTree;
+
     private void Start()
     {
         targetChosen = false;
@@ -104,9 +106,10 @@ public class TutorialLevelPathfinding : MonoBehaviour
                 if (doSwap == true) {
                     //tilemap = secondTilemap;
                     targetChosen = true;
-                    tilemap.SetTile(chosenTilePosition, originalTile);
+                    //tilemap.SetTile(chosenTilePosition, originalTile);
                     chosenTilePosition = new Vector3Int(4,0,1);
-                    originalTile = tilemap.GetTile(chosenTilePosition);
+                    //originalTile = tilemap.GetTile(chosenTilePosition);
+                    tilemap.SetTile(chosenTilePosition, baseOfTree);
                     chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
                     if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
                         inTreeClimbAnim = true;
