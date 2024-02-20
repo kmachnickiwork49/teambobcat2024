@@ -5129,7 +5129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 892861685}
-  range: 8
+  range: 20
   debugTile: {fileID: 11400000, guid: 0d986cdf0e65d45728d143223cda0eeb, type: 2}
   speed: 2
   my_sprinklers:
