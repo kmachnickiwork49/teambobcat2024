@@ -29,6 +29,10 @@ public class TutorialLevelPathfinding : MonoBehaviour
     [SerializeField] private Sprite baseSpr;
     [SerializeField] private Sprite climbSpr;
 
+    private float curr_time;
+    private float prev_time;
+    private bool doWait;
+
     private void Start()
     {
         targetChosen = false;
@@ -48,12 +52,33 @@ public class TutorialLevelPathfinding : MonoBehaviour
 
     void Update()
     {
+
+        curr_time = Time.time;
+        if (doWait) {
+            if (my_sprinklers != null && doneClimb == false) {
+                bool doSwap = true;
+                foreach (SprinklerActivate sprnk in my_sprinklers) {
+                    doSwap = doSwap && sprnk.getTriggerVal();
+                }
+                if (doSwap == true) {
+                    prev_time = prev_time - 2.5f; // Interrupt rest states if any
+                }
+            }
+            if (curr_time - prev_time > 2) {
+                doWait = false;
+            } else {
+                return;
+            }
+        }
+
         if (inTreeClimbAnim == false && inJumpStreetAnim == false) {
             tileCoordPosition = tilemap.WorldToCell(transform.position);
-            //if (doneClimb) { 
+            /*
+            if (doneClimb) { 
                 Debug.Log("xyz: " + tileCoordPosition.x + " " + tileCoordPosition.y + " " + tileCoordPosition.z);
                 Debug.Log("targetChosen: " + targetChosen);
-            //}
+            }
+            */
             if (!targetChosen) {
                 GetTilesInRange();
             } 
@@ -64,6 +89,8 @@ public class TutorialLevelPathfinding : MonoBehaviour
                 tilemap.SetTile(chosenTilePosition, originalTile);
                 targetChosen = false;
                 hasHitIntermediate = false;
+                doWait = true;
+                prev_time = curr_time;
                 return;
             }
             //transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, speed * Time.deltaTime);
@@ -153,9 +180,11 @@ public class TutorialLevelPathfinding : MonoBehaviour
             }
         }
         
+        /*
         for (int i = 0; i < tilesLen; i++) {
             Debug.Log(candidateTiles[i]);
         }
+        */
 
         chosenTilePosition = candidateTiles[Random.Range(0, tilesLen)];
         originalTile = tilemap.GetTile(chosenTilePosition);
