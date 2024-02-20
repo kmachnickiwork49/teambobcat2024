@@ -2645,16 +2645,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: 5, y: 0, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 19
-      m_TileSpriteIndex: 13
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 7, y: 0, z: 0}
     second:
       serializedVersion: 2
@@ -2795,7 +2785,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: d68a657a98d2943b5b0c259150d71deb, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 32
+  - m_RefCount: 31
     m_Data: {fileID: 11400000, guid: 44952ec63c8d44994bb8b73ae24aa292, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 45b3af15161314382a4cccbc7e713336, type: 2}
@@ -2858,7 +2848,7 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 32
+  - m_RefCount: 31
     m_Data: {fileID: 583599453, guid: 57cc8621f6c0a4e369e2811e2dc22aaf, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -2907,7 +2897,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 1599546335, guid: ccb3da52b43cb4956b4d52957fb27374, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 106
+  - m_RefCount: 105
     m_Data:
       e00: 1
       e01: 0
@@ -2926,7 +2916,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 106
+  - m_RefCount: 105
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
     m_Data: {r: 0.7259867, g: 0.50471133, b: 0.56002367, a: 1}
@@ -4653,9 +4643,10 @@ MonoBehaviour:
   - {fileID: 1545448736}
   - {fileID: 2016599455}
   secondTilemap: {fileID: 1576567053}
-  baseSpr: {fileID: 21300000, guid: 82bc0d1c9cc7c4f48aa024892083fe1b, type: 3}
-  climbSpr: {fileID: 21300000, guid: 7281919227de6484e88ed44bdc76d82d, type: 3}
+  baseSpr: {fileID: 21300000, guid: f12a0664fe67f4b468e89045d4e28584, type: 3}
+  climbSpr: {fileID: 21300000, guid: f12a0664fe67f4b468e89045d4e28584, type: 3}
   baseOfTree: {fileID: 11400000, guid: 44952ec63c8d44994bb8b73ae24aa292, type: 2}
+  restTime: 5
 --- !u!50 &2060574028
 Rigidbody2D:
   serializedVersion: 4

@@ -35,6 +35,8 @@ public class TutorialLevelPathfinding : MonoBehaviour
 
     [SerializeField] private TileBase baseOfTree;
 
+    [SerializeField] private float restTime;
+
     private void Start()
     {
         targetChosen = false;
@@ -63,10 +65,10 @@ public class TutorialLevelPathfinding : MonoBehaviour
                     doSwap = doSwap && sprnk.getTriggerVal();
                 }
                 if (doSwap == true) {
-                    prev_time = prev_time - 2.5f; // Interrupt rest states if any
+                    prev_time = prev_time - restTime - 0.5f; // Interrupt rest states if any
                 }
             }
-            if (curr_time - prev_time > 2) {
+            if (curr_time - prev_time > restTime || tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1))==null) {
                 doWait = false;
             } else {
                 return;
@@ -132,16 +134,22 @@ public class TutorialLevelPathfinding : MonoBehaviour
                 // 9 5 0 final tile coords
             }
         } else if (inJumpStreetAnim) {
-
+            // prev_time has been set
+            // Use curr_time - prev_time to model jump descent
+            // Trigger jump_in_the_caac audio?
         }
     }
 
     void MoveISO_CARD() {
 
         // INTERMEDIATE SELECTION IS MINOR BUGGED
+        // Also does not account for avoiding non-tile while moving on path
 
         // Isometric cardinal direction movement
         intermediateTilePosition = new Vector3Int(chosenTilePosition.x, tileCoordPosition.y, tileCoordPosition.z);
+        if (tilemap.GetTile(intermediateTilePosition) == null) {
+            intermediateTilePosition = new Vector3Int(tileCoordPosition.x, chosenTilePosition.y, tileCoordPosition.z);
+        }
         intermediateWorldPosition = tilemap.GetCellCenterWorld(intermediateTilePosition) + new Vector3(0f, -tilemap.cellSize.y / 2f, 0f);
         if (hasHitIntermediate == false) {
             // Intermediate first
