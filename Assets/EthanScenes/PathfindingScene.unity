@@ -6632,6 +6632,7 @@ GameObject:
   - component: {fileID: 1614189803}
   - component: {fileID: 1614189802}
   - component: {fileID: 1614189804}
+  - component: {fileID: 1614189805}
   m_Layer: 0
   m_Name: Bob
   m_TagString: Untagged
@@ -6694,11 +6695,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaec936ae6ed8441096613975f085d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetSelection: {fileID: 1614189805}
   tilemap: {fileID: 821396260}
-  range: 3
   debugTile: {fileID: 11400000, guid: 80ff838d6af124844a66b4d7a1301eb1, type: 2}
   speed: 0.4
-  testTile: {x: 9, y: 0, z: 0}
+--- !u!114 &1614189805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614189801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0339193aeaea649d6ae06b3b681ddb8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 3
+  tilemap: {fileID: 821396260}
 --- !u!1 &1639620106
 GameObject:
   m_ObjectHideFlags: 0

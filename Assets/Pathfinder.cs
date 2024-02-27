@@ -25,12 +25,21 @@ public class Pathfinder : MonoBehaviour
                 new Vector3Int(1, 0, 0),
                 new Vector3Int(-1, 0, 0),
           };
+        targetSelection.SelectTile(new Vector3Int(9, 0, 0));
+        targetTile = targetSelection.GetTarget();
+        originalTile = tilemap.GetTile(targetTile.Value);
+        tilemap.SetTile(targetTile.Value, debugTile);
+        routeTiles = GetRoute(
+		    tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+		    targetTile.Value);
+        routeIdx = 0;
     }
     
     void Update()
     {
         if (routeIdx >= routeTiles.Count) 
     	{
+            targetSelection.SelectTile(null);
             if (targetTile.HasValue)
             {
                 tilemap.SetTile(targetTile.Value, originalTile);
@@ -94,7 +103,7 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.01f)
+    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.02f)
     {
         Vector2 position2D = new(position.x, position.y);
         Vector2 targetPosition2D = new(targetPosition.x, targetPosition.y);
