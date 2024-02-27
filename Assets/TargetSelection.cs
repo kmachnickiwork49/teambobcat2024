@@ -20,7 +20,7 @@ public class TargetSelection : MonoBehaviour
         }
     }
 
-    public void SelectTile(Vector3Int selected) 
+    public void SelectTile(Vector3Int? selected) 
     {
         selectedTile = selected;
     }
