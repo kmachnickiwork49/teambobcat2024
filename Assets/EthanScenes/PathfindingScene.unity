@@ -6697,7 +6697,8 @@ MonoBehaviour:
   tilemap: {fileID: 821396260}
   range: 3
   debugTile: {fileID: 11400000, guid: 80ff838d6af124844a66b4d7a1301eb1, type: 2}
-  speed: 0.5
+  speed: 0.4
+  testTile: {x: 3, y: 0, z: 0}
 --- !u!1 &1639620106
 GameObject:
   m_ObjectHideFlags: 0
