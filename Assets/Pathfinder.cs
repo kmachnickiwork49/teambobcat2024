@@ -6,9 +6,11 @@ using UnityEngine.Tilemaps;
 public class Pathfinder : MonoBehaviour
 {
     [SerializeField] private TargetSelection targetSelection;
+    [SerializeField] private Vector3Int initialTile;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
+    [SerializeField] private bool debugMode;
     private List<Vector3Int> routeTiles;
     private int routeIdx;
     private Vector3Int[] directions;
@@ -25,10 +27,14 @@ public class Pathfinder : MonoBehaviour
                 new Vector3Int(1, 0, 0),
                 new Vector3Int(-1, 0, 0),
           };
-        targetSelection.SelectTile(new Vector3Int(9, 0, 0));
+
+        targetSelection.SelectTile(initialTile);
         targetTile = targetSelection.GetTarget();
-        originalTile = tilemap.GetTile(targetTile.Value);
-        tilemap.SetTile(targetTile.Value, debugTile);
+        if (debugMode)
+        {
+            originalTile = tilemap.GetTile(targetTile.Value);
+            tilemap.SetTile(targetTile.Value, debugTile);
+        }
         routeTiles = GetRoute(
 		    tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
 		    targetTile.Value);
@@ -40,13 +46,19 @@ public class Pathfinder : MonoBehaviour
         if (routeIdx >= routeTiles.Count) 
     	{
             targetSelection.SelectTile(null);
-            if (targetTile.HasValue)
+            if (debugMode)
             {
-                tilemap.SetTile(targetTile.Value, originalTile);
+                if (targetTile.HasValue)
+                {
+                    tilemap.SetTile(targetTile.Value, originalTile);
+                }
+                targetTile = targetSelection.GetTarget();
+                originalTile = tilemap.GetTile(targetTile.Value);
+                tilemap.SetTile(targetTile.Value, debugTile);
+            } else
+            {
+                targetTile = targetSelection.GetTarget();
             }
-            targetTile = targetSelection.GetTarget();
-            originalTile = tilemap.GetTile(targetTile.Value);
-            tilemap.SetTile(targetTile.Value, debugTile);
             routeTiles = GetRoute(
 		        tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
 		        targetTile.Value);
