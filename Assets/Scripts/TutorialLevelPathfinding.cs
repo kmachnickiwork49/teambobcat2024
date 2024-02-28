@@ -51,8 +51,8 @@ public class TutorialLevelPathfinding : MonoBehaviour
         if (inTreeClimbAnim == false && inJumpStreetAnim == false) {
             tileCoordPosition = tilemap.WorldToCell(transform.position);
             //if (doneClimb) { 
-                Debug.Log("xyz: " + tileCoordPosition.x + " " + tileCoordPosition.y + " " + tileCoordPosition.z);
-                Debug.Log("targetChosen: " + targetChosen);
+                //Debug.Log("xyz: " + tileCoordPosition.x + " " + tileCoordPosition.y + " " + tileCoordPosition.z);
+                //Debug.Log("targetChosen: " + targetChosen);
             //}
             if (!targetChosen) {
                 GetTilesInRange();
@@ -83,7 +83,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
                     chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
                     if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
                         inTreeClimbAnim = true;
-                        Debug.Log("enter tree climb");
+                        //Debug.Log("enter tree climb");
                     }
                 }
             }
@@ -93,7 +93,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
             gameObject.transform.position += new Vector3(0,Time.deltaTime,0);
             //Debug.Log(gameObject.transform.position.y);
             if (Mathf.Abs(gameObject.transform.position.y - 4) < 0.01) {
-                Debug.Log("exit tree climb");
+                //Debug.Log("exit tree climb");
                 inTreeClimbAnim = false;
                 targetChosen = false;
                 gameObject.GetComponent<SpriteRenderer>().sprite = baseSpr;
@@ -154,7 +154,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
         }
         
         for (int i = 0; i < tilesLen; i++) {
-            Debug.Log(candidateTiles[i]);
+            //Debug.Log(candidateTiles[i]);
         }
 
         chosenTilePosition = candidateTiles[Random.Range(0, tilesLen)];
