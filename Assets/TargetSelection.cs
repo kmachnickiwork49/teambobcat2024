@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,9 @@ public class TargetSelection : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     private Vector3Int? selectedTile;
     private List<Vector3Int> candidateTiles;
+
+    private HashSet<Vector3Int> forbiddenTiles = new();
+    public event EventHandler onForbiddenChanged;
 
     void Start()
     {
@@ -24,10 +28,26 @@ public class TargetSelection : MonoBehaviour
     {
         selectedTile = selected;
     }
+    public void ModifyForbiddenTile(Vector3Int tile, bool isForbidden)
+    {
+        if (isForbidden)
+        {
+            forbiddenTiles.Add(tile);
+        } else
+        {
+            forbiddenTiles.Remove(tile);
+        }
+        onForbiddenChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public HashSet<Vector3Int> GetForbiddenTiles()
+    {
+        return forbiddenTiles;
+    }
 
     public Vector3Int GetTarget()
     {
-        if (selectedTile.HasValue) return selectedTile.Value;
+        if (selectedTile.HasValue && !forbiddenTiles.Contains(selectedTile.Value)) return selectedTile.Value;
 
         return GetRandomTile();
     }
@@ -51,14 +71,14 @@ public class TargetSelection : MonoBehaviour
 
                 TileBase tile = tilemap.GetTile(cellPosition);
 
-                if (tile != null)
+                if (tile != null && !forbiddenTiles.Contains(cellPosition))
                 {
                     candidateTiles[tilesLen] = cellPosition;
                     tilesLen += 1;
                 }
             }
         }
-        Vector3Int chosenTile = candidateTiles[Random.Range(0, tilesLen)];
+        Vector3Int chosenTile = candidateTiles[UnityEngine.Random.Range(0, tilesLen)];
         return chosenTile;
     }
 }
