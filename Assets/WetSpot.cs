@@ -32,7 +32,7 @@ public class WetSpot : MonoBehaviour
         spriteRenderer.color = Color.Lerp(startColor, endColor, t);
     }
 
-    public void setIsOn(bool onVal)
+    public void SetIsOn(bool onVal)
     {
         startColor = spriteRenderer.color;
         endColor = onVal ? onColor : offColor;

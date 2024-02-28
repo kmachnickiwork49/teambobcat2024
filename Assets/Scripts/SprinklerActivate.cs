@@ -7,6 +7,8 @@ public class SprinklerActivate : MonoBehaviour
 {
     [SerializeField] private int range;
     [SerializeField] private Tilemap tilemap;
+    [SerializeField] private TargetSelection targetSelection;
+    [SerializeField] private bool debugMode;
     private GameObject sprinkles;
     private WetSpot wetSpot;
 
@@ -15,7 +17,7 @@ public class SprinklerActivate : MonoBehaviour
         sprinkles = transform.Find("Sprinkles").gameObject;
         wetSpot = GetComponentInChildren<WetSpot>();
         sprinkles.SetActive(false);
-        wetSpot.setIsOn(false);
+        wetSpot.SetIsOn(false);
     }
 
     private bool triggered = false;
@@ -23,7 +25,7 @@ public class SprinklerActivate : MonoBehaviour
         Debug.Log("mouse clicked sprinkler activate");
         triggered = !triggered;
         sprinkles.SetActive(triggered);
-        wetSpot.setIsOn(triggered);
+        wetSpot.SetIsOn(triggered);
 		Vector3Int selfCellPosition = tilemap.WorldToCell(transform.position);
         for (int x = -range; x <= range; x++)
         {
@@ -33,12 +35,17 @@ public class SprinklerActivate : MonoBehaviour
                     selfCellPosition.x + x,
                     selfCellPosition.y + y,
                     selfCellPosition.z);
-                /*
-                TileFlags currentFlags = tilemap.GetTileFlags(cellPosition);
-                tilemap.SetTileFlags(cellPosition, currentFlags & ~TileFlags.LockColor);
-                //Debug.Log(tilemap.GetTile(cellPosition));
-                tilemap.SetColor(cellPosition, triggered ? new Color(0.95f, 0.95f, 1f) : new Color(1f, 1f, 1f));
-                */
+                TileBase tile = tilemap.GetTile(cellPosition);
+                if (tile != null)
+                {
+                    targetSelection.ModifyForbiddenTile(cellPosition, triggered);
+                }
+                if (debugMode)
+                {
+                    TileFlags currentFlags = tilemap.GetTileFlags(cellPosition);
+                    tilemap.SetTileFlags(cellPosition, currentFlags & ~TileFlags.LockColor);
+                    tilemap.SetColor(cellPosition, triggered ? new Color(0.95f, 0.95f, 1f) : new Color(1f, 1f, 1f));
+                }
             }
         }
     }

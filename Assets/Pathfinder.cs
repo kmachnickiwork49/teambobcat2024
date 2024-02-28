@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class Pathfinder : MonoBehaviour
 
     private void Start()
     {
+        targetSelection.onForbiddenChanged += HandleForbiddenChanged;
         routeTiles = new List<Vector3Int>(); //starts off empty
         directions = new Vector3Int[]
           {
@@ -43,6 +45,12 @@ public class Pathfinder : MonoBehaviour
     
     void Update()
     {
+        if (routeTiles == null)
+        {
+            // Bob is dead
+            return;
+        }
+
         if (routeIdx >= routeTiles.Count) 
     	{
             targetSelection.SelectTile(null);
@@ -62,6 +70,11 @@ public class Pathfinder : MonoBehaviour
             routeTiles = GetRoute(
 		        tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
 		        targetTile.Value);
+            if (routeTiles == null)
+            {
+                // Bob is dead
+                return;
+            }
             routeIdx = 0;
 	    }
 
@@ -74,6 +87,25 @@ public class Pathfinder : MonoBehaviour
 
         Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+    }
+
+    private void HandleForbiddenChanged(object sender, EventArgs e)
+    {
+        if (targetTile.HasValue)
+        {
+            if (targetSelection.GetForbiddenTiles().Contains(targetTile.Value))
+            {
+                routeTiles = new();
+                return;
+            }
+        }
+        routeTiles = GetRoute(
+            tilemap.WorldToCell(transform.position) - new Vector3Int(0, 0, 1), 
+            targetTile.Value);
+        if (routeTiles == null)
+        {
+            routeTiles = new();
+        }
     }
 
     List<Vector3Int> GetRoute(Vector3Int startCell, Vector3Int targetCell)
@@ -103,7 +135,8 @@ public class Pathfinder : MonoBehaviour
             {
                 Vector3Int neighbor = currentCell + direction;
 
-                if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor))
+                if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor) && 
+                    !targetSelection.GetForbiddenTiles().Contains(neighbor))
                 {
                     queue.Enqueue(neighbor);
                     seenFrom[neighbor] = currentCell;
