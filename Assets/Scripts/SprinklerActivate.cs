@@ -32,6 +32,8 @@ public class SprinklerActivate : MonoBehaviour
                 }
             }
         }
+
+        gameObject.GetComponentInChildren<ParticleSystem>().Play();
     }
 
     public bool getTriggerVal() {
