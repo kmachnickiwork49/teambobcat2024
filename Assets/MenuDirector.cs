@@ -17,6 +17,5 @@ public class MenuDirector : MonoBehaviour
     IEnumerator TriggerEvent(float waitTime, Action action) {
         yield return new WaitForSeconds(waitTime);
         action?.Invoke();
-        Debug.Log("invoke");
     }
 }
