@@ -15,12 +15,12 @@ public class MenuCamera : MonoBehaviour
     {
         Camera.main.orthographicSize = startSize;
         transform.position = new(transform.position.x, startY, transform.position.z);
-        menuDirector.OnIntroComplete += Zoom;
+        menuDirector.OnIntroComplete.AddListener(Zoom);
     }
 
     void Zoom() {
         StartCoroutine(ZoomTransition());
-        menuDirector.OnIntroComplete -= Zoom;
+        menuDirector.OnIntroComplete.RemoveListener(Zoom);
     }
 
     IEnumerator ZoomTransition() { 

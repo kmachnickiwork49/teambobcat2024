@@ -13,14 +13,14 @@ public class Title : MonoBehaviour
     void Start()
     {
         titleText = GetComponent<TMP_Text>();
-        menuDirector.OnIntroComplete += Vanish;
         StartCoroutine(AppearTransition());
+        menuDirector.OnIntroComplete.AddListener(Vanish);
     }
 
     void Vanish()
     {
         StartCoroutine(VanishTransition());
-        menuDirector.OnIntroComplete -= Vanish;
+        menuDirector.OnIntroComplete.RemoveListener(Vanish);
     }
 
     IEnumerator AppearTransition() { 

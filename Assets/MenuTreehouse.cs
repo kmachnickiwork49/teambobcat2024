@@ -11,12 +11,12 @@ public class MenuTreehouse : MonoBehaviour
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        menuDirector.OnIntroComplete += SwitchToInterior;
+        menuDirector.OnIntroComplete.AddListener(SwitchToInterior);
     }
 
     void SwitchToInterior() {
         StartCoroutine(FadeOut());
-        menuDirector.OnIntroComplete -= SwitchToInterior;
+        menuDirector.OnIntroComplete.RemoveListener(SwitchToInterior);
     }
 
     IEnumerator FadeOut()

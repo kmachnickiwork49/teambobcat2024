@@ -13,13 +13,13 @@ public class MenuButton : MonoBehaviour
     {
         titleText = GetComponent<TMP_Text>();
         titleText.color = new Color(titleText.color.r, titleText.color.g, titleText.color.b, 0);
-        menuDirector.OnIntroComplete += Appear;
+        menuDirector.OnIntroComplete.AddListener(Appear);
     }
 
     void Appear()
     {
         StartCoroutine(AppearTransition());
-        menuDirector.OnIntroComplete -= Appear;
+        menuDirector.OnIntroComplete.AddListener(Appear);
     }
 
     IEnumerator AppearTransition() {
