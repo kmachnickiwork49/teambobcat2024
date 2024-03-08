@@ -24794,15 +24794,15 @@ MonoBehaviour:
   tilemap: {fileID: 892861685}
   range: 20
   debugTile: {fileID: 11400000, guid: 0d986cdf0e65d45728d143223cda0eeb, type: 2}
-  speed: 2
+  speed: 0.8
   my_sprinklers:
   - {fileID: 2146280785}
   - {fileID: 1925958662}
   - {fileID: 1545448736}
   - {fileID: 2016599455}
   secondTilemap: {fileID: 1576567053}
-  baseSpr: {fileID: 21300000, guid: f12a0664fe67f4b468e89045d4e28584, type: 3}
-  climbSpr: {fileID: 21300000, guid: f12a0664fe67f4b468e89045d4e28584, type: 3}
+  baseSpr: {fileID: 19089775, guid: 88fd6d33bb47d4e86b3379341f09e562, type: 3}
+  climbSpr: {fileID: 21300000, guid: 21299ecf57dcf472c99ff92d0c5978a9, type: 3}
   baseOfTree: {fileID: 11400000, guid: 44952ec63c8d44994bb8b73ae24aa292, type: 2}
   restTime: 5
 --- !u!50 &2060574028
@@ -24842,7 +24842,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.71, y: -0.75, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -24888,12 +24888,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 21300000, guid: f12a0664fe67f4b468e89045d4e28584, type: 3}
+  m_Sprite: {fileID: 19089775, guid: 88fd6d33bb47d4e86b3379341f09e562, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 12, y: 8.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
