@@ -83,8 +83,9 @@ public class TutorialLevelPathfinding : MonoBehaviour
                 Debug.Log("targetChosen: " + targetChosen);
             }
             */
-            if (!targetChosen) {
+            if (!targetChosen || tilemap.GetTile(chosenTilePosition) == null) {
                 GetTilesInRange();
+                hasHitIntermediate = false;
             } 
             if (tileCoordPosition.x == chosenTilePosition.x 
                     && tileCoordPosition.y == chosenTilePosition.y
