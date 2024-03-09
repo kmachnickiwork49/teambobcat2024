@@ -9,6 +9,8 @@ public class TutorialLevelPathfinding : MonoBehaviour
     [SerializeField] private int range;
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
+    [SerializeField] private float wetSpeed;
+    private float currSpeed;
     private TileBase originalTile;
     private Vector3Int chosenTilePosition;
     private Vector3 chosenWorldPosition;
@@ -77,6 +79,12 @@ public class TutorialLevelPathfinding : MonoBehaviour
 
         if (inTreeClimbAnim == false && inJumpStreetAnim == false) {
             tileCoordPosition = tilemap.WorldToCell(transform.position);
+            if (tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1)) == null) {
+                // Wet currently
+                currSpeed = wetSpeed;
+            } else {
+                currSpeed = speed;
+            }
             /*
             if (doneClimb) { 
                 Debug.Log("xyz: " + tileCoordPosition.x + " " + tileCoordPosition.y + " " + tileCoordPosition.z);
@@ -98,7 +106,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
                 prev_time = curr_time;
                 return;
             }
-            //transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, speed * Time.deltaTime);
+            //transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, currSpeed * Time.deltaTime);
             MoveISO_CARD();
 
             if (my_sprinklers != null && doneClimb == false) {
@@ -123,10 +131,12 @@ public class TutorialLevelPathfinding : MonoBehaviour
         } else if (inTreeClimbAnim) {
             //Debug.Log("inTreeClimbAnim");
             gameObject.GetComponent<SpriteRenderer>().sprite = climbSpr;
-            gameObject.transform.position += new Vector3(0,Time.deltaTime,0);
+            gameObject.transform.position += new Vector3(0, Time.deltaTime * 0.75f, 0);
+            gameObject.transform.localScale = new Vector3(0.2f,0.2f,1);
             //Debug.Log(gameObject.transform.position.y);
             if (Mathf.Abs(gameObject.transform.position.y - 4) < 0.01) {
                 Debug.Log("exit tree climb");
+                gameObject.transform.localScale = new Vector3(0.1f,0.1f,1);
                 inTreeClimbAnim = false;
                 targetChosen = false;
                 gameObject.GetComponent<SpriteRenderer>().sprite = baseSpr;
@@ -154,14 +164,14 @@ public class TutorialLevelPathfinding : MonoBehaviour
         intermediateWorldPosition = tilemap.GetCellCenterWorld(intermediateTilePosition) + new Vector3(0f, -tilemap.cellSize.y / 2f, 0f);
         if (hasHitIntermediate == false) {
             // Intermediate first
-            transform.position = Vector3.MoveTowards(transform.position, intermediateWorldPosition, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, intermediateWorldPosition, currSpeed * Time.deltaTime);
             if (tileCoordPosition.x == intermediateTilePosition.x 
                 && tileCoordPosition.y == intermediateTilePosition.y
                 && Mathf.Abs(transform.position.x - intermediateWorldPosition.x) < 0.01
                 && Mathf.Abs(transform.position.y - intermediateWorldPosition.y) < 0.01) { hasHitIntermediate = true; } 
         } else {
             // Already reached intermediate
-            transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, currSpeed * Time.deltaTime);
             if (tileCoordPosition.x == chosenTilePosition.x 
             && tileCoordPosition.y == chosenTilePosition.y
             && Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01
@@ -208,4 +218,58 @@ public class TutorialLevelPathfinding : MonoBehaviour
 
         targetChosen = true;
     }
+
+    /*
+    List<Vector3Int> GetRoute(Vector3Int startCell, Vector3Int targetCell)
+    {
+        //set routeTiles to a list generated here
+        startCell -= new Vector3Int(0, 0, 1);
+        Queue<Vector3Int> queue = new Queue<Vector3Int>();
+        Dictionary<Vector3Int, Vector3Int> seenFrom = new Dictionary<Vector3Int, Vector3Int>(); //maps new cell:the cell where new cell came from
+        queue.Enqueue(startCell);
+        while (queue.Count > 0)
+        {
+            Vector3Int currentCell = queue.Dequeue();
+
+            if (currentCell == targetCell)
+            {
+                // Reconstruct the path
+                List<Vector3Int> path = new List<Vector3Int>();
+                while (currentCell != startCell)
+                {
+                    path.Add(currentCell);
+                    currentCell = seenFrom[currentCell];
+                }
+                path.Reverse();
+                routeIdx = 0;
+                return path;
+ 
+
+            }
+
+            foreach (Vector3Int direction in directions)
+            {
+                Vector3Int neighbor = currentCell + direction;
+
+
+                if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor))
+                {
+                    queue.Enqueue(neighbor);
+                    seenFrom[neighbor] = currentCell;
+                }
+            }
+        }
+
+        // No path found
+        return null;
+    }
+
+    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.01f)
+    {
+        Vector2 position2D = new Vector2(position.x, position.y);
+        Vector2 targetPosition2D = new Vector2(targetPosition.x, targetPosition.y);
+        float distance = Vector2.Distance(position2D, targetPosition2D);
+        return distance <= threshold;
+    }
+    */
 }

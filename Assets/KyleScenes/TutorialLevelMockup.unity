@@ -25194,7 +25194,8 @@ MonoBehaviour:
   tilemap: {fileID: 892861685}
   range: 20
   debugTile: {fileID: 11400000, guid: 0d986cdf0e65d45728d143223cda0eeb, type: 2}
-  speed: 0.8
+  speed: 0.5
+  wetSpeed: 1.25
   my_sprinklers:
   - {fileID: 2146280785}
   - {fileID: 1925958662}
@@ -25202,9 +25203,9 @@ MonoBehaviour:
   - {fileID: 2016599455}
   secondTilemap: {fileID: 1576567053}
   baseSpr: {fileID: 19089775, guid: 88fd6d33bb47d4e86b3379341f09e562, type: 3}
-  climbSpr: {fileID: 21300000, guid: 21299ecf57dcf472c99ff92d0c5978a9, type: 3}
+  climbSpr: {fileID: 21300000, guid: 8d1f637191889464ab49d78e8b985f22, type: 3}
   baseOfTree: {fileID: 11400000, guid: 44952ec63c8d44994bb8b73ae24aa292, type: 2}
-  restTime: 5
+  restTime: 8
 --- !u!50 &2060574028
 Rigidbody2D:
   serializedVersion: 4
