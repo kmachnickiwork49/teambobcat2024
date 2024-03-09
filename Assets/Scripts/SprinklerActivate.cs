@@ -8,11 +8,20 @@ public class SprinklerActivate : MonoBehaviour
 
     [SerializeField] private int negBoundX, negBoundY, posBoundX, posBoundY;
     [SerializeField] private Tilemap my_tm;
+    private WetSpot wetSpot;
 
     private bool triggered = false;
+
+    void Start()
+    {
+        wetSpot = GetComponentInChildren<WetSpot>();
+        wetSpot.SetIsOn(false);
+    }
     void OnMouseDown() {
         Debug.Log("mouse clicked sprinkler activate");
+
         triggered = true;
+        wetSpot.SetIsOn(triggered);
 
         for (int x = negBoundX; x <= posBoundX; x++)
         {
