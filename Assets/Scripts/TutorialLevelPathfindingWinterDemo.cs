@@ -40,10 +40,9 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
 
     [SerializeField] private float restTime;
 
-
-
-
-
+    bool movingRight = false;
+    bool movingUp = false;
+ 
     // From Pathfinder.cs
     [SerializeField] private TargetSelection targetSelection;
     [SerializeField] private Vector3Int initialTile;
@@ -269,6 +268,16 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         }
     }
 
+    public bool GetMovingUp()
+    {
+        return movingUp;
+    }
+
+    public bool GetMovingRight()
+    {
+        return movingRight;
+    }
+
     void GetTilesInRange()
     {
         int tilesLen = 0;
@@ -362,6 +371,9 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         Vector3 nextTileWorld = tilemap.GetCellCenterWorld(routeTiles[routeIdx]);
 
         Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
+        Vector3 direction = targetPosition - transform.position;
+        movingRight = direction.x > 0;
+        movingUp = direction.y > 0;
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, currSpeed * Time.deltaTime);
 
         if (IsCloseTo(nextTileWorld, transform.position)) // xy difference magnitude within threshold

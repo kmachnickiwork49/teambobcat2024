@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/EthanScenes/MainMenu.unity
     guid: b353ff756e81e4b20b5d9ca9386c62ff
-  - enabled: 1
+  - enabled: 0
     path: Assets/KyleScenes/TutorialLevelMockup.unity
     guid: d8d993b9f0744482b9018fbbc07f3c99
+  - enabled: 1
+    path: Assets/KyleScenes/TutorialLevelWinterDemo.unity
+    guid: 5c886dcc87d084341bba47519755fbc2
   m_configObjects: {}
