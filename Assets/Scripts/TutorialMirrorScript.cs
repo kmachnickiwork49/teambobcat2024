@@ -13,17 +13,20 @@ public class TutorialMirrorScript : MonoBehaviour
     [SerializeField] private TargetSelection targetSelection;
     [SerializeField] private int range;
 
+    [SerializeField] GameObject wall_crash;
+
     private Vector3Int my_targ;
 
     public Vector3Int GetMyTarg() {
+        if (angleIndex == 0) { return targetSelection.GetRandomTile(); }
         return my_targ;
     }
 
     void OnMouseDown() {
         Debug.Log("mouse clicked on mirror");
-        int[] my_angles = {0, 15, 30, 45, 60};
+        int[] my_angles = {0, 15, 30, 45, 60, 75};
 
-        if (angleIndex < 4) {
+        if (angleIndex < 5) {
             angleIndex++;
         }
 
@@ -63,6 +66,9 @@ public class TutorialMirrorScript : MonoBehaviour
             gameObject.transform.rotation = new Quaternion(0,0.382683426f,0,0.923879564f);
         } else if (angleIndex == 4) {
             gameObject.transform.rotation = new Quaternion(0,0.5f,0,0.866025388f);
+        } else if (angleIndex == 5) {
+            targetSelection.ModifyForbiddenTile(new Vector3Int(13,5,0), false);
+            wall_crash.SetActive(true);
         }
 
     }

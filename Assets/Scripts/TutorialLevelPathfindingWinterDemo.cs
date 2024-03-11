@@ -56,6 +56,12 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
 
     [SerializeField] private TutorialMirrorScript my_mirr;
 
+    [SerializeField] private SpriteRenderer treefront;
+    private float treefrontTimer;
+    private float treefrontTimerStart;
+    [SerializeField] Color color1;
+    [SerializeField] Color color2;
+
 
     private void Start()
     {
@@ -158,6 +164,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             //MoveISO_CARD();
 
             if (doneClimb && !inTreeClimbAnim && !inJumpStreetAnim) {
+                //targetSelection.ModifyForbiddenTile(new Vector3Int(13,5,0), true);
                 chosenTilePosition = my_mirr.GetMyTarg();
             }
 
@@ -183,6 +190,8 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                     targetSelection.SelectTile(chosenTilePosition); // NEW FROM Pathfinder
                     if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
                         inTreeClimbAnim = true;
+                        treefrontTimerStart = Time.time;
+                        treefrontTimer = Time.time;
                         Debug.Log("enter tree climb");
                     }
                 } else if (tilemap.GetTile(chosenTilePosition) == null
@@ -197,6 +206,10 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             gameObject.GetComponent<SpriteRenderer>().sprite = climbSpr;
             gameObject.transform.position += new Vector3(0, Time.deltaTime * 0.75f, 0);
             gameObject.transform.localScale = new Vector3(0.2f,0.2f,1);
+            treefrontTimer += Time.deltaTime;
+            print((treefrontTimer - treefrontTimerStart));
+            float t = Mathf.Clamp01((treefrontTimer - treefrontTimerStart) / 2.5f);
+            treefront.color = Color.Lerp(color1, color2, t);
             //Debug.Log(gameObject.transform.position.y);
             if (Mathf.Abs(gameObject.transform.position.y - 4) < 0.01) {
                 Debug.Log("exit tree climb");
@@ -217,6 +230,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                     tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
                     targetTile.Value);
                 routeIdx = 0;
+                targetSelection.ModifyForbiddenTile(new Vector3Int(13,5,0), true); // Prevent accidental access special area
                 print(chosenTilePosition);
                 // 9 5 0 final tile coords
             }
