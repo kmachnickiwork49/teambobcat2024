@@ -2290,16 +2290,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'kyle machnicki - team lead, programmer
+  m_text: 'kyle machnicki - team lead, programmer, art
 
     karen jin - artist
 
     lucy
-    kimber -artist
+    kimber - artist
 
-    ethan jackson - programmer, music
+    siddharth taneja - programmer
 
     mariam masud - programmer
+
+    ethan
+    jackson - programmer, music
 
 '
   m_isRightToLeft: 0

@@ -64,7 +64,6 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
     [SerializeField] float treeExtVanishTime;
     [SerializeField] SpriteRenderer treeExtSr;
 
-
     private void Start()
     {
         targetChosen = false;
@@ -209,6 +208,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         } else if (inTreeClimbAnim) {
             //Debug.Log("inTreeClimbAnim");
             GetComponent<Animator>().enabled = false;
+            GetComponent<BobOrientation>().enabled = false;
             gameObject.GetComponent<SpriteRenderer>().sprite = climbSpr;
             gameObject.transform.position += new Vector3(0, Time.deltaTime * 0.75f, 0);
             gameObject.transform.localScale = new Vector3(0.2f,0.2f,1);
@@ -223,6 +223,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 inTreeClimbAnim = false;
                 targetChosen = false;
                 GetComponent<Animator>().enabled = true;
+                GetComponent<BobOrientation>().enabled = true;
                 gameObject.GetComponent<SpriteRenderer>().sprite = baseSpr;
                 tilemap = secondTilemap;
                 doneClimb = true;
