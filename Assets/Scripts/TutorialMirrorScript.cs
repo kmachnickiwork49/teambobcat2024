@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class TutorialMirrorScript : MonoBehaviour
 {
@@ -20,11 +21,35 @@ public class TutorialMirrorScript : MonoBehaviour
     [SerializeField] GameObject beam_4;
     [SerializeField] GameObject beam_5;
 
+    private float startCrash;
+    private float currTime;
+
     private Vector3Int my_targ;
 
     public Vector3Int GetMyTarg() {
         if (angleIndex == 0) { return targetSelection.GetRandomTile(); }
         return my_targ;
+    }
+
+    public bool doingChase() {
+        return (angleIndex > 0);
+    }
+
+    void Update() {
+        currTime = Time.time;
+        if (angleIndex == 5) {
+            if (currTime - startCrash > 0.40f) {
+                wall_crash.SetActive(true);
+                targetSelection.gameObject.transform.position += new Vector3(5*Time.deltaTime,-2*Time.deltaTime*(currTime-startCrash),0);
+                targetSelection.gameObject.transform.Rotate(0,0,12.0f);
+            }
+            if (currTime - startCrash > 1.0f) {
+                //Destroy(targetSelection);
+            }
+            if (currTime - startCrash > 5.0f) {
+                SceneManager.LoadScene("TutorialFinish");
+            }
+        }
     }
 
     void OnMouseDown() {
@@ -82,7 +107,8 @@ public class TutorialMirrorScript : MonoBehaviour
             //targetSelection.ModifyForbiddenTile(new Vector3Int(13,5,0), false);
             beam_4.SetActive(false);
             beam_5.SetActive(true);
-            wall_crash.SetActive(true);
+            startCrash = Time.time;
+            //wall_crash.SetActive(true);
         }
 
     }

@@ -121,7 +121,8 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 }
             }
             if (curr_time - prev_time > restTime || tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1))==null
-            || targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1))) {
+            || targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1))
+            || my_mirr.doingChase()) {
                 //print(targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1)));
                 doWait = false;
             } else {
@@ -132,7 +133,8 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         if (inTreeClimbAnim == false && inJumpStreetAnim == false) {
             tileCoordPosition = tilemap.WorldToCell(transform.position);
             if (tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1)) == null
-            || targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1))) {
+            || targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1))
+            || my_mirr.doingChase()) {
                 // Wet currently
                 //print("currently wet");
                 currSpeed = wetSpeed;
