@@ -52,7 +52,7 @@ public class TargetSelection : MonoBehaviour
         return GetRandomTile();
     }
 
-    Vector3Int GetRandomTile() 
+    public Vector3Int GetRandomTile() 
     {
         Vector3Int selfCellPosition = tilemap.WorldToCell(transform.position);
         int tilesLen = 0;

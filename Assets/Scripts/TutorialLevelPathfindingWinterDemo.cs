@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,6 +40,21 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
 
     [SerializeField] private float restTime;
 
+
+
+
+
+    // From Pathfinder.cs
+    [SerializeField] private TargetSelection targetSelection;
+    [SerializeField] private Vector3Int initialTile;
+    [SerializeField] private bool debugMode;
+    private List<Vector3Int> routeTiles;
+    private int routeIdx;
+    private Vector3Int[] directions;
+    private Vector3Int? targetTile;
+
+
+
     private void Start()
     {
         targetChosen = false;
@@ -54,6 +70,31 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         inTreeClimbAnim = false;
         inJumpStreetAnim = false;
         doneClimb = false;
+
+        // Paste from Pathfinder.cs
+        targetSelection.onForbiddenChanged += HandleForbiddenChanged;
+        routeTiles = new List<Vector3Int>(); //starts off empty
+        directions = new Vector3Int[]
+          {
+                new Vector3Int(0, 1, 0),
+                new Vector3Int(0, -1, 0),
+                new Vector3Int(1, 0, 0),
+                new Vector3Int(-1, 0, 0),
+          };
+
+        targetSelection.SelectTile(initialTile);
+        targetTile = targetSelection.GetTarget();
+        if (debugMode)
+        {
+            originalTile = tilemap.GetTile(targetTile.Value);
+            tilemap.SetTile(targetTile.Value, debugTile);
+        }
+        routeTiles = GetRoute(
+            tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+		    targetTile.Value);
+        routeIdx = 0;
+        // End paste from Pathfinder.cs
+
     }
 
     void Update()
@@ -68,9 +109,12 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 }
                 if (doSwap == true) {
                     prev_time = prev_time - restTime - 0.5f; // Interrupt rest states if any
+                    doWait = false;
                 }
             }
-            if (curr_time - prev_time > restTime || tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1))==null) {
+            if (curr_time - prev_time > restTime || tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1))==null
+            || targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1))) {
+                //print(targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1)));
                 doWait = false;
             } else {
                 return;
@@ -79,8 +123,10 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
 
         if (inTreeClimbAnim == false && inJumpStreetAnim == false) {
             tileCoordPosition = tilemap.WorldToCell(transform.position);
-            if (tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1)) == null) {
+            if (tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1)) == null
+            || targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1))) {
                 // Wet currently
+                //print("currently wet");
                 currSpeed = wetSpeed;
             } else {
                 currSpeed = speed;
@@ -107,7 +153,11 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 return;
             }
             //transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, currSpeed * Time.deltaTime);
-            MoveISO_CARD();
+            //MoveISO_CARD();
+
+            targetSelection.SelectTile(chosenTilePosition);
+            //print(chosenTilePosition);
+            FollowPath();
 
             if (my_sprinklers != null && doneClimb == false) {
                 bool doSwap = true;
@@ -115,17 +165,25 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                     doSwap = doSwap && sprnk.getTriggerVal();
                 }
                 if (doSwap == true) {
+                    //print("doSwap true");
                     //tilemap = secondTilemap;
                     targetChosen = true;
                     //tilemap.SetTile(chosenTilePosition, originalTile);
-                    chosenTilePosition = new Vector3Int(4,0,1);
+                    //chosenTilePosition = new Vector3Int(4,0,1);
+                    chosenTilePosition = new Vector3Int(4,0,0);
                     //originalTile = tilemap.GetTile(chosenTilePosition);
                     tilemap.SetTile(chosenTilePosition, baseOfTree);
                     chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
+                    targetSelection.SelectTile(chosenTilePosition); // NEW FROM Pathfinder
                     if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
                         inTreeClimbAnim = true;
-                        //Debug.Log("enter tree climb");
+                        Debug.Log("enter tree climb");
                     }
+                } else if (tilemap.GetTile(chosenTilePosition) == null
+                            || targetSelection.GetForbiddenTiles().Contains(chosenTilePosition)) {
+                    // Goal is wet, need new goal
+                    print("goal got wet");
+                    chosenTilePosition = targetSelection.GetRandomTile();
                 }
             }
         } else if (inTreeClimbAnim) {
@@ -208,7 +266,14 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         }
         */
 
-        chosenTilePosition = candidateTiles[Random.Range(0, tilesLen)];
+        /*
+        chosenTilePosition = candidateTiles[UnityEngine.Random.Range(0, tilesLen)];
+        while (targetSelection.GetForbiddenTiles().Contains(chosenTilePosition)) {
+            // Do not select a wet tile
+            chosenTilePosition = candidateTiles[UnityEngine.Random.Range(0, tilesLen)];
+        }
+        */
+        chosenTilePosition = targetSelection.GetRandomTile();
         originalTile = tilemap.GetTile(chosenTilePosition);
         tilemap.SetTile(chosenTilePosition, debugTile);
 
@@ -219,13 +284,84 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         targetChosen = true;
     }
 
-    /*
+    void FollowPath()
+    {
+        if (routeTiles == null)
+        {
+            // Bob is dead
+            return;
+        }
+
+        if (routeIdx >= routeTiles.Count) 
+    	{
+            //targetSelection.SelectTile(null);
+            /*
+            if (debugMode)
+            {
+                if (targetTile.HasValue)
+                {
+                    tilemap.SetTile(targetTile.Value, originalTile);
+                }
+                targetTile = targetSelection.GetTarget();
+                originalTile = tilemap.GetTile(targetTile.Value);
+                tilemap.SetTile(targetTile.Value, debugTile);
+            } else
+            {
+                */
+                targetTile = targetSelection.GetTarget();
+            //}
+            //print(transform.position); // 2.5 -0.5 1, exact centered looks correct
+            //print( tilemap.WorldToCell(transform.position) ); // 0 -4 1
+            routeTiles = GetRoute(
+		        //tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+                tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+		        //targetTile.Value);
+                chosenTilePosition);
+            if (routeTiles == null)
+            {
+                // Bob is dead
+                print("null routeTiles");
+                return;
+            }
+            routeIdx = 0;
+	    }
+
+        Vector3 nextTileWorld = tilemap.GetCellCenterWorld(routeTiles[routeIdx]);
+
+        Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, currSpeed * Time.deltaTime);
+
+        if (IsCloseTo(nextTileWorld, transform.position)) // xy difference magnitude within threshold
+        {
+            routeIdx += 1;
+            return;
+        }
+    }
+
+    private void HandleForbiddenChanged(object sender, EventArgs e)
+    {
+        if (targetTile.HasValue)
+        {
+            if (targetSelection.GetForbiddenTiles().Contains(targetTile.Value))
+            {
+                routeTiles = new();
+                return;
+            }
+        }
+        routeTiles = GetRoute(
+            //tilemap.WorldToCell(transform.position) - new Vector3Int(0, 0, 1), 
+            tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+            targetTile.Value);
+        if (routeTiles == null)
+        {
+            routeTiles = new();
+        }
+    }
+
     List<Vector3Int> GetRoute(Vector3Int startCell, Vector3Int targetCell)
     {
-        //set routeTiles to a list generated here
-        startCell -= new Vector3Int(0, 0, 1);
-        Queue<Vector3Int> queue = new Queue<Vector3Int>();
-        Dictionary<Vector3Int, Vector3Int> seenFrom = new Dictionary<Vector3Int, Vector3Int>(); //maps new cell:the cell where new cell came from
+        Queue<Vector3Int> queue = new();
+        Dictionary<Vector3Int, Vector3Int> seenFrom = new(); //maps new cell:the cell where new cell came from
         queue.Enqueue(startCell);
         while (queue.Count > 0)
         {
@@ -234,23 +370,61 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             if (currentCell == targetCell)
             {
                 // Reconstruct the path
-                List<Vector3Int> path = new List<Vector3Int>();
+                List<Vector3Int> path = new();
                 while (currentCell != startCell)
                 {
-                    path.Add(currentCell);
+                    path.Add(currentCell); 
                     currentCell = seenFrom[currentCell];
                 }
+                path.Add(startCell);
                 path.Reverse();
-                routeIdx = 0;
+                //foreach( Vector3Int x in path) {
+                    //print( x );
+                //}
                 return path;
- 
-
             }
 
             foreach (Vector3Int direction in directions)
             {
                 Vector3Int neighbor = currentCell + direction;
 
+                if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor) && 
+                    !targetSelection.GetForbiddenTiles().Contains(neighbor))
+                {
+                    queue.Enqueue(neighbor);
+                    seenFrom[neighbor] = currentCell;
+                }
+            }
+        }
+
+        // No path found, NOW TRY TO USE FORBIDDEN TO RECOVER
+        queue = new();
+        seenFrom = new(); //maps new cell:the cell where new cell came from
+        queue.Enqueue(startCell);
+        while (queue.Count > 0)
+        {
+            Vector3Int currentCell = queue.Dequeue();
+
+            if (currentCell == targetCell)
+            {
+                // Reconstruct the path
+                List<Vector3Int> path = new();
+                while (currentCell != startCell)
+                {
+                    path.Add(currentCell); 
+                    currentCell = seenFrom[currentCell];
+                }
+                path.Add(startCell);
+                path.Reverse();
+                //foreach( Vector3Int x in path) {
+                    //print( x );
+                //}
+                return path;
+            }
+
+            foreach (Vector3Int direction in directions)
+            {
+                Vector3Int neighbor = currentCell + direction;
 
                 if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor))
                 {
@@ -264,12 +438,12 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         return null;
     }
 
-    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.01f)
+    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.002f)
     {
-        Vector2 position2D = new Vector2(position.x, position.y);
-        Vector2 targetPosition2D = new Vector2(targetPosition.x, targetPosition.y);
+        Vector2 position2D = new(position.x, position.y);
+        Vector2 targetPosition2D = new(targetPosition.x, targetPosition.y);
         float distance = Vector2.Distance(position2D, targetPosition2D);
         return distance <= threshold;
     }
-    */
+
 }

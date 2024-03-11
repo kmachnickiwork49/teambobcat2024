@@ -5959,6 +5959,9 @@ MonoBehaviour:
   climbSpr: {fileID: 21300000, guid: 8d1f637191889464ab49d78e8b985f22, type: 3}
   baseOfTree: {fileID: 11400000, guid: 44952ec63c8d44994bb8b73ae24aa292, type: 2}
   restTime: 8
+  targetSelection: {fileID: 2060574031}
+  initialTile: {x: 6, y: -2, z: 0}
+  debugMode: 0
 --- !u!1001 &2118165468
 PrefabInstance:
   m_ObjectHideFlags: 0
