@@ -42,6 +42,8 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
 
     bool movingRight = false;
     bool movingUp = false;
+
+    bool isStopped = false;
  
     // From Pathfinder.cs
     [SerializeField] private TargetSelection targetSelection;
@@ -127,6 +129,11 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         frontFence1.color = Color.Lerp(color1, color2, t_fadefront);
         BG_Front.color = Color.Lerp(color1, color2, t_fadefront);
         
+        isStopped = doWait;
+        if (gameObject.GetComponent<Rigidbody2D>().velocity.magnitude > 0.02) {
+            isStopped = false;
+        }
+
         curr_time = Time.time;
         if (doWait) {
             if (my_sprinklers != null && doneClimb == false) {
@@ -137,6 +144,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 if (doSwap == true) {
                     prev_time = prev_time - restTime - 0.5f; // Interrupt rest states if any
                     doWait = false;
+                    isStopped = false;
                 }
             }
             if (curr_time - prev_time > restTime || tilemap.GetTile(tileCoordPosition - new Vector3Int(0,0,1))==null
@@ -144,6 +152,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             || my_mirr.doingChase()) {
                 //print(targetSelection.GetForbiddenTiles().Contains(tileCoordPosition - new Vector3Int(0,0,1)));
                 doWait = false;
+                isStopped = false;
             } else {
                 return;
             }
@@ -296,6 +305,10 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
     public bool GetMovingUp()
     {
         return movingUp;
+    }
+
+    public bool GetStopped() {
+        return isStopped;
     }
 
     public bool GetMovingRight()
