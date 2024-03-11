@@ -5,21 +5,6 @@ using UnityEngine.Tilemaps;
 
 public class SprinklerActivate : MonoBehaviour
 {
-    [SerializeField] private int range;
-    [SerializeField] private Tilemap tilemap;
-    [SerializeField] private TargetSelection targetSelection;
-    [SerializeField] private bool debugMode;
-    private GameObject sprinkles;
-    private WetSpot wetSpot;
-
-    void Start()
-    {
-        sprinkles = transform.Find("Sprinkles").gameObject;
-        wetSpot = GetComponentInChildren<WetSpot>();
-        sprinkles.SetActive(false);
-        wetSpot.SetIsOn(false);
-    }
-
     [SerializeField] private int negBoundX, negBoundY, posBoundX, posBoundY;
     [SerializeField] private Tilemap my_tm;
     private WetSpot wetSpot;
