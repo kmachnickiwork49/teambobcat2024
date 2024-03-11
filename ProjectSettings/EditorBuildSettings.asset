@@ -5,7 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/EthanScenes/MainMenu.unity
+    guid: b353ff756e81e4b20b5d9ca9386c62ff
+  - enabled: 1
+    path: Assets/KyleScenes/TutorialLevelWinterDemo.unity
+    guid: 5c886dcc87d084341bba47519755fbc2
+  - enabled: 1
+    path: Assets/KyleScenes/TutorialFinish.unity
+    guid: 718d8cbb476c24b8e9eedfc05c61371e
   m_configObjects: {}
