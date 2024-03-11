@@ -61,6 +61,9 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
     [SerializeField] Color color1;
     [SerializeField] Color color2;
 
+    [SerializeField] float treeExtVanishTime;
+    [SerializeField] SpriteRenderer treeExtSr;
+
 
     private void Start()
     {
@@ -188,6 +191,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                     chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
                     targetSelection.SelectTile(chosenTilePosition); // NEW FROM Pathfinder
                     if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
+                        StartCoroutine(VanishTreeExterior());
                         inTreeClimbAnim = true;
                         treefrontTimerStart = Time.time;
                         treefrontTimer = Time.time;
@@ -278,6 +282,16 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
     public bool GetMovingRight()
     {
         return movingRight;
+    }
+
+    IEnumerator VanishTreeExterior() { 
+        for (float t = 0f; t < treeExtVanishTime; t += Time.deltaTime)
+        {
+            float normalizedTime = t / treeExtVanishTime;
+            treeExtSr.color = new Color(treeExtSr.color.r, treeExtSr.color.g, treeExtSr.color.b, 1 - normalizedTime);
+            yield return null;
+        }
+        treeExtSr.color = new Color(treeExtSr.color.r, treeExtSr.color.g, treeExtSr.color.b, 0);
     }
 
     void GetTilesInRange()
