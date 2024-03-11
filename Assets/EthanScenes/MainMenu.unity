@@ -2162,12 +2162,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'ethan jackson - programming, music
+  m_text: 'kyle machnicki - team lead, programmer
 
-    mariam masud - programming
+    karen jin - artist
 
-    kyle
-    machnicki - progamming, art'
+    lucy
+    kimber -artist
+
+    ethan jackson - programmer
+
+    mariam masud - programmer
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
