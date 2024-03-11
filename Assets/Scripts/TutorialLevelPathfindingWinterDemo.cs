@@ -54,6 +54,8 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
     private Vector3Int? targetTile;
 
 
+    [SerializeField] private TutorialMirrorScript my_mirr;
+
 
     private void Start()
     {
@@ -155,6 +157,10 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             //transform.position = Vector3.MoveTowards(transform.position, chosenWorldPosition, currSpeed * Time.deltaTime);
             //MoveISO_CARD();
 
+            if (doneClimb && !inTreeClimbAnim && !inJumpStreetAnim) {
+                chosenTilePosition = my_mirr.GetMyTarg();
+            }
+
             targetSelection.SelectTile(chosenTilePosition);
             //print(chosenTilePosition);
             FollowPath();
@@ -200,6 +206,18 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 gameObject.GetComponent<SpriteRenderer>().sprite = baseSpr;
                 tilemap = secondTilemap;
                 doneClimb = true;
+
+                targetSelection.setNewTilemap(secondTilemap);
+                chosenTilePosition = targetSelection.GetRandomTile();
+                routeTiles = new List<Vector3Int>(); //starts off empty
+                //targetSelection.SelectTile(initialTile);
+                targetSelection.SelectTile(chosenTilePosition);
+                targetTile = targetSelection.GetTarget();
+                routeTiles = GetRoute(
+                    tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+                    targetTile.Value);
+                routeIdx = 0;
+                print(chosenTilePosition);
                 // 9 5 0 final tile coords
             }
         } else if (inJumpStreetAnim) {
@@ -312,6 +330,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             //}
             //print(transform.position); // 2.5 -0.5 1, exact centered looks correct
             //print( tilemap.WorldToCell(transform.position) ); // 0 -4 1
+            //print(transform.position - new Vector3(0,0,1.0f));
             routeTiles = GetRoute(
 		        //tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
                 tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),

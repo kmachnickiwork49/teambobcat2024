@@ -422,6 +422,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   my_tm: {fileID: 1576567053}
   lighted_square: {fileID: 11400000, guid: 1983a99f96bc24824a020d98f3315c5f, type: 2}
+  targetSelection: {fileID: 2060574031}
+  range: 10
 --- !u!212 &315951002
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5962,6 +5964,7 @@ MonoBehaviour:
   targetSelection: {fileID: 2060574031}
   initialTile: {x: 6, y: -2, z: 0}
   debugMode: 0
+  my_mirr: {fileID: 315951001}
 --- !u!1001 &2118165468
 PrefabInstance:
   m_ObjectHideFlags: 0

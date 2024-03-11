@@ -24,6 +24,19 @@ public class TargetSelection : MonoBehaviour
         }
     }
 
+    public void setNewTilemap(Tilemap tm) {
+        tilemap = tm;
+        candidateTiles = new List<Vector3Int>();
+        for (int x = -range; x <= range; x++) {
+            for (int y = -range; y <= range; y++) {
+                candidateTiles.Add(new Vector3Int(-1,-1,-1));
+            }
+        }
+        forbiddenTiles = new();
+        selectedTile = GetRandomTile();
+        print("selectedTile: " + selectedTile + " ");
+    }
+
     public void SelectTile(Vector3Int? selected) 
     {
         selectedTile = selected;
