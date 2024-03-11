@@ -124,7 +124,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
                     chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
                     if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
                         inTreeClimbAnim = true;
-                        Debug.Log("enter tree climb");
+                        //Debug.Log("enter tree climb");
                     }
                 }
             }
@@ -204,7 +204,7 @@ public class TutorialLevelPathfinding : MonoBehaviour
         
         /*
         for (int i = 0; i < tilesLen; i++) {
-            Debug.Log(candidateTiles[i]);
+            //Debug.Log(candidateTiles[i]);
         }
         */
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,29 +6,21 @@ using UnityEngine.Tilemaps;
 
 public class Pathfinder : MonoBehaviour
 {
+    [SerializeField] private TargetSelection targetSelection;
+    [SerializeField] private Vector3Int initialTile;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private int range;
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
-    [SerializeField] private Vector3Int testTile;
-    private bool selectDone;
-    private bool selectDone2;
-    private TileBase originalTile;
-    private Vector3Int chosenTilePosition;
-    private Vector3 chosenWorldPosition;
-    private Vector3Int tileCoordPosition;
-    private bool targetChosen;
-    private List<Vector3Int> candidateTiles;
+    [SerializeField] private bool debugMode;
     private List<Vector3Int> routeTiles;
     private int routeIdx;
     private Vector3Int[] directions;
+    private Vector3Int? targetTile;
+    private TileBase originalTile;
 
     private void Start()
     {
-        targetChosen = false;
-        selectDone = false;
-        selectDone2 = false;
-        candidateTiles = new List<Vector3Int>();
+        targetSelection.onForbiddenChanged += HandleForbiddenChanged;
         routeTiles = new List<Vector3Int>(); //starts off empty
         directions = new Vector3Int[]
           {
@@ -35,109 +28,94 @@ public class Pathfinder : MonoBehaviour
                 new Vector3Int(0, -1, 0),
                 new Vector3Int(1, 0, 0),
                 new Vector3Int(-1, 0, 0),
-                new Vector3Int(1, 1, 0),
-                new Vector3Int(1, -1, 0),
-                new Vector3Int(-1, 1, 0),
-                new Vector3Int(-1, -1, 0)
           };
-        for (int x = -range; x <= range; x++) {
-            for (int y = -range; y <= range; y++) {
-                candidateTiles.Add(new Vector3Int(0,0,0));
-            }
+
+        targetSelection.SelectTile(initialTile);
+        targetTile = targetSelection.GetTarget();
+        if (debugMode)
+        {
+            originalTile = tilemap.GetTile(targetTile.Value);
+            tilemap.SetTile(targetTile.Value, debugTile);
         }
+        routeTiles = GetRoute(
+		    tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+		    targetTile.Value);
+        routeIdx = 0;
     }
     
     void Update()
     {
-        tileCoordPosition = tilemap.WorldToCell(transform.position);
- 
-        if (testTile != null && !selectDone)
+        if (routeTiles == null)
         {
-            GoToSelection();
-
-        }
-        else if (!targetChosen && selectDone2) {
-            GetTilesInRange();
-            //get route sets routeTiles
-            routeTiles = GetRoute(tileCoordPosition, chosenTilePosition);
+            // Bob is dead
+            return;
         }
 
-        if (tileCoordPosition.x == routeTiles[routeIdx].x && tileCoordPosition.y == routeTiles[routeIdx].y)
+        if (routeIdx >= routeTiles.Count) 
+    	{
+            targetSelection.SelectTile(null);
+            if (debugMode)
+            {
+                if (targetTile.HasValue)
+                {
+                    tilemap.SetTile(targetTile.Value, originalTile);
+                }
+                targetTile = targetSelection.GetTarget();
+                originalTile = tilemap.GetTile(targetTile.Value);
+                tilemap.SetTile(targetTile.Value, debugTile);
+            } else
+            {
+                targetTile = targetSelection.GetTarget();
+            }
+            //print(transform.position); // 2.5 -0.5 1, exact centered looks correct
+            //print( tilemap.WorldToCell(transform.position) ); // 0 -4 1
+            routeTiles = GetRoute(
+		        //tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+                tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+		        targetTile.Value);
+            if (routeTiles == null)
+            {
+                // Bob is dead
+                return;
+            }
+            routeIdx = 0;
+	    }
+
+        Vector3 nextTileWorld = tilemap.GetCellCenterWorld(routeTiles[routeIdx]);
+
+        Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+        if (IsCloseTo(nextTileWorld, transform.position)) // xy difference magnitude within threshold
         {
             routeIdx += 1;
-            if (routeIdx >= routeTiles.Count)
+            return;
+        }
+    }
+
+    private void HandleForbiddenChanged(object sender, EventArgs e)
+    {
+        if (targetTile.HasValue)
+        {
+            if (targetSelection.GetForbiddenTiles().Contains(targetTile.Value))
             {
-                if (!selectDone2 && selectDone) //finally reaching testTile destination
-                {
-                    tilemap.SetTile(testTile, originalTile);
-                    selectDone2 = true;
-                }
-                else
-                {
-                    tilemap.SetTile(chosenTilePosition, originalTile);
-                }
-                targetChosen = false;
+                routeTiles = new();
                 return;
             }
         }
-
-        Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
-
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-    }
-
-    void GoToSelection()
-    {
-        selectDone = true;
-        tileCoordPosition = tilemap.WorldToCell(transform.position);
-        routeTiles = GetRoute(tileCoordPosition, testTile);
-        originalTile = tilemap.GetTile(testTile);
-        tilemap.SetTile(testTile, debugTile);
-    }
-
-    void GetTilesInRange()
-    {
-        int tilesLen = 0;
-        for (int x = -range; x <= range; x++)
+        routeTiles = GetRoute(
+            tilemap.WorldToCell(transform.position) - new Vector3Int(0, 0, 1), 
+            targetTile.Value);
+        if (routeTiles == null)
         {
-            for (int y = -range; y <= range; y++)
-            {
-                if (x==0 && y==0)
-                {
-                    continue;
-                }
-                Vector3Int cellPosition = new Vector3Int(
-        		    tileCoordPosition.x + x, 
-		            tileCoordPosition.y + y, 
-		            tileCoordPosition.z - 1);
-
-                TileBase tile = tilemap.GetTile(cellPosition);
-
-                if (tile != null)
-                {
-                    candidateTiles[tilesLen] = cellPosition;
-                    tilesLen += 1;
-                    //Debug.Log(tilesLen);
-                }
-            }
+            routeTiles = new();
         }
-        chosenTilePosition = candidateTiles[Random.Range(0, tilesLen)];
-        originalTile = tilemap.GetTile(chosenTilePosition);
-        tilemap.SetTile(chosenTilePosition, debugTile);
-
-        chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
-        chosenWorldPosition.z = transform.position.z;
-        chosenWorldPosition += new Vector3(0f, tilemap.cellSize.y / 2f, 0f);
-
-        targetChosen = true;
     }
 
     List<Vector3Int> GetRoute(Vector3Int startCell, Vector3Int targetCell)
     {
-        //set routeTiles to a list generated here
-        startCell -= new Vector3Int(0, 0, 1);
-        Queue<Vector3Int> queue = new Queue<Vector3Int>();
-        Dictionary<Vector3Int, Vector3Int> seenFrom = new Dictionary<Vector3Int, Vector3Int>(); //maps new cell:the cell where new cell came from
+        Queue<Vector3Int> queue = new();
+        Dictionary<Vector3Int, Vector3Int> seenFrom = new(); //maps new cell:the cell where new cell came from
         queue.Enqueue(startCell);
         while (queue.Count > 0)
         {
@@ -146,25 +124,26 @@ public class Pathfinder : MonoBehaviour
             if (currentCell == targetCell)
             {
                 // Reconstruct the path
-                List<Vector3Int> path = new List<Vector3Int>();
+                List<Vector3Int> path = new();
                 while (currentCell != startCell)
                 {
-                    path.Add(currentCell);
+                    path.Add(currentCell); 
                     currentCell = seenFrom[currentCell];
                 }
+                path.Add(startCell);
                 path.Reverse();
-                routeIdx = 0;
+                //foreach( Vector3Int x in path) {
+                    //print( x );
+                //}
                 return path;
- 
-
             }
 
             foreach (Vector3Int direction in directions)
             {
                 Vector3Int neighbor = currentCell + direction;
 
-
-                if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor))
+                if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor) && 
+                    !targetSelection.GetForbiddenTiles().Contains(neighbor))
                 {
                     queue.Enqueue(neighbor);
                     seenFrom[neighbor] = currentCell;
@@ -176,5 +155,11 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-
+    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.002f)
+    {
+        Vector2 position2D = new(position.x, position.y);
+        Vector2 targetPosition2D = new(targetPosition.x, targetPosition.y);
+        float distance = Vector2.Distance(position2D, targetPosition2D);
+        return distance <= threshold;
+    }
 }
