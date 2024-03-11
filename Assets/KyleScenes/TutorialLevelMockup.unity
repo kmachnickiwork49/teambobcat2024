@@ -3682,7 +3682,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: f12a0664fe67f4b468e89045d4e28584, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 82bc0d1c9cc7c4f48aa024892083fe1b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3708,7 +3708,7 @@ MonoBehaviour:
   targetSelection: {fileID: 2060574032}
   initialTile: {x: 3, y: -3, z: 0}
   tilemap: {fileID: 892861685}
-  debugTile: {fileID: 11400000, guid: 80ff838d6af124844a66b4d7a1301eb1, type: 2}
+  debugTile: {fileID: 11400000, guid: 0d986cdf0e65d45728d143223cda0eeb, type: 2}
   speed: 2
   debugMode: 1
 --- !u!114 &2060574032

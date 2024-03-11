@@ -67,8 +67,11 @@ public class Pathfinder : MonoBehaviour
             {
                 targetTile = targetSelection.GetTarget();
             }
+            //print(transform.position); // 2.5 -0.5 1, exact centered looks correct
+            //print( tilemap.WorldToCell(transform.position) ); // 0 -4 1
             routeTiles = GetRoute(
-		        tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+		        //tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+                tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
 		        targetTile.Value);
             if (routeTiles == null)
             {
@@ -79,14 +82,15 @@ public class Pathfinder : MonoBehaviour
 	    }
 
         Vector3 nextTileWorld = tilemap.GetCellCenterWorld(routeTiles[routeIdx]);
-        if (IsCloseTo(nextTileWorld, transform.position))
+
+        Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+        if (IsCloseTo(nextTileWorld, transform.position)) // xy difference magnitude within threshold
         {
             routeIdx += 1;
             return;
         }
-
-        Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
     }
 
     private void HandleForbiddenChanged(object sender, EventArgs e)
@@ -123,11 +127,14 @@ public class Pathfinder : MonoBehaviour
                 List<Vector3Int> path = new();
                 while (currentCell != startCell)
                 {
-                    path.Add(currentCell);
+                    path.Add(currentCell); 
                     currentCell = seenFrom[currentCell];
                 }
                 path.Add(startCell);
                 path.Reverse();
+                //foreach( Vector3Int x in path) {
+                    //print( x );
+                //}
                 return path;
             }
 
@@ -148,7 +155,7 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.02f)
+    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.002f)
     {
         Vector2 position2D = new(position.x, position.y);
         Vector2 targetPosition2D = new(targetPosition.x, targetPosition.y);
