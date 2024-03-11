@@ -40,10 +40,9 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
 
     [SerializeField] private float restTime;
 
-
-
-
-
+    bool movingRight = false;
+    bool movingUp = false;
+ 
     // From Pathfinder.cs
     [SerializeField] private TargetSelection targetSelection;
     [SerializeField] private Vector3Int initialTile;
@@ -61,6 +60,9 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
     private float treefrontTimerStart;
     [SerializeField] Color color1;
     [SerializeField] Color color2;
+
+    [SerializeField] float treeExtVanishTime;
+    [SerializeField] SpriteRenderer treeExtSr;
 
 
     private void Start()
@@ -191,6 +193,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                     chosenWorldPosition = tilemap.GetCellCenterWorld(chosenTilePosition);
                     targetSelection.SelectTile(chosenTilePosition); // NEW FROM Pathfinder
                     if (Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01 && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) {
+                        StartCoroutine(VanishTreeExterior());
                         inTreeClimbAnim = true;
                         treefrontTimerStart = Time.time;
                         treefrontTimer = Time.time;
@@ -205,6 +208,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             }
         } else if (inTreeClimbAnim) {
             //Debug.Log("inTreeClimbAnim");
+            GetComponent<Animator>().enabled = false;
             gameObject.GetComponent<SpriteRenderer>().sprite = climbSpr;
             gameObject.transform.position += new Vector3(0, Time.deltaTime * 0.75f, 0);
             gameObject.transform.localScale = new Vector3(0.2f,0.2f,1);
@@ -218,6 +222,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 gameObject.transform.localScale = new Vector3(0.1f,0.1f,1);
                 inTreeClimbAnim = false;
                 targetChosen = false;
+                GetComponent<Animator>().enabled = true;
                 gameObject.GetComponent<SpriteRenderer>().sprite = baseSpr;
                 tilemap = secondTilemap;
                 doneClimb = true;
@@ -269,6 +274,26 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             && Mathf.Abs(transform.position.x - chosenWorldPosition.x) < 0.01
             && Mathf.Abs(transform.position.y - chosenWorldPosition.y) < 0.01) { hasHitIntermediate = false; }
         }
+    }
+
+    public bool GetMovingUp()
+    {
+        return movingUp;
+    }
+
+    public bool GetMovingRight()
+    {
+        return movingRight;
+    }
+
+    IEnumerator VanishTreeExterior() { 
+        for (float t = 0f; t < treeExtVanishTime; t += Time.deltaTime)
+        {
+            float normalizedTime = t / treeExtVanishTime;
+            treeExtSr.color = new Color(treeExtSr.color.r, treeExtSr.color.g, treeExtSr.color.b, 1 - normalizedTime);
+            yield return null;
+        }
+        treeExtSr.color = new Color(treeExtSr.color.r, treeExtSr.color.g, treeExtSr.color.b, 0);
     }
 
     void GetTilesInRange()
@@ -364,6 +389,9 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         Vector3 nextTileWorld = tilemap.GetCellCenterWorld(routeTiles[routeIdx]);
 
         Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
+        Vector3 direction = targetPosition - transform.position;
+        movingRight = direction.x > 0;
+        movingUp = direction.y > 0;
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, currSpeed * Time.deltaTime);
 
         if (IsCloseTo(nextTileWorld, transform.position)) // xy difference magnitude within threshold
