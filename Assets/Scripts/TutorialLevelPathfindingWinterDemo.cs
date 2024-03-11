@@ -202,6 +202,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
             }
         } else if (inTreeClimbAnim) {
             //Debug.Log("inTreeClimbAnim");
+            GetComponent<Animator>().enabled = false;
             gameObject.GetComponent<SpriteRenderer>().sprite = climbSpr;
             gameObject.transform.position += new Vector3(0, Time.deltaTime * 0.75f, 0);
             gameObject.transform.localScale = new Vector3(0.2f,0.2f,1);
@@ -215,6 +216,7 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
                 gameObject.transform.localScale = new Vector3(0.1f,0.1f,1);
                 inTreeClimbAnim = false;
                 targetChosen = false;
+                GetComponent<Animator>().enabled = true;
                 gameObject.GetComponent<SpriteRenderer>().sprite = baseSpr;
                 tilemap = secondTilemap;
                 doneClimb = true;

@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class BobOrientation : MonoBehaviour
 {
-    [SerializeField] Sprite upLeftSprite;
-    [SerializeField] Sprite downLeftSprite;
+    [SerializeField] AnimatorControllerParameter upLeft;
+    [SerializeField] AnimatorControllerParameter downLeft;
     [SerializeField] TutorialLevelPathfindingWinterDemo pathfinding;
-    SpriteRenderer sr;
+    Animator animator;
 
     void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        sr.sprite = pathfinding.GetMovingUp() ? upLeftSprite : downLeftSprite; 
+        animator.SetBool("movingUp", pathfinding.GetMovingUp());
         transform.localScale = new(
             0.1f * (pathfinding.GetMovingRight() ? -1 : 1),
             transform.localScale.y,
