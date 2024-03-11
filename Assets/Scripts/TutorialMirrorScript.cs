@@ -14,6 +14,11 @@ public class TutorialMirrorScript : MonoBehaviour
     [SerializeField] private int range;
 
     [SerializeField] GameObject wall_crash;
+    [SerializeField] GameObject beam_1;
+    [SerializeField] GameObject beam_2;
+    [SerializeField] GameObject beam_3;
+    [SerializeField] GameObject beam_4;
+    [SerializeField] GameObject beam_5;
 
     private Vector3Int my_targ;
 
@@ -57,17 +62,26 @@ public class TutorialMirrorScript : MonoBehaviour
 
         int curr_angle = my_angles[angleIndex];
         if (angleIndex == 0) {
-            gameObject.transform.rotation = new Quaternion(0,0,0,1);
+            //gameObject.transform.rotation = new Quaternion(0,0,0,1);
         } else if (angleIndex == 1) {
-            gameObject.transform.rotation = new Quaternion(0,0.130526155f,0,0.991444886f);
+            //gameObject.transform.rotation = new Quaternion(0,0.130526155f,0,0.991444886f);
+            beam_1.SetActive(true);
         } else if (angleIndex == 2) {
-            gameObject.transform.rotation = new Quaternion(0,0.258819103f,0,0.965925813f);
+            //gameObject.transform.rotation = new Quaternion(0,0.258819103f,0,0.965925813f);
+            beam_1.SetActive(false);
+            beam_2.SetActive(true);
         } else if (angleIndex == 3) {
-            gameObject.transform.rotation = new Quaternion(0,0.382683426f,0,0.923879564f);
+            //gameObject.transform.rotation = new Quaternion(0,0.382683426f,0,0.923879564f);
+            beam_2.SetActive(false);
+            beam_3.SetActive(true);
         } else if (angleIndex == 4) {
-            gameObject.transform.rotation = new Quaternion(0,0.5f,0,0.866025388f);
+            //gameObject.transform.rotation = new Quaternion(0,0.5f,0,0.866025388f);
+            beam_3.SetActive(false);
+            beam_4.SetActive(true);
         } else if (angleIndex == 5) {
-            targetSelection.ModifyForbiddenTile(new Vector3Int(13,5,0), false);
+            //targetSelection.ModifyForbiddenTile(new Vector3Int(13,5,0), false);
+            beam_4.SetActive(false);
+            beam_5.SetActive(true);
             wall_crash.SetActive(true);
         }
 
