@@ -63,6 +63,14 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
     [SerializeField] Color color2;
 
 
+
+    [SerializeField] Tilemap frontFence;
+    [SerializeField] Tilemap frontFence1;
+    [SerializeField] SpriteRenderer BG_Front;
+
+    private float enterSceneTime;
+    private float timePastEnterScene;
+
     private void Start()
     {
         targetChosen = false;
@@ -103,11 +111,20 @@ public class TutorialLevelPathfindingWinterDemo : MonoBehaviour
         routeIdx = 0;
         // End paste from Pathfinder.cs
 
+        enterSceneTime = Time.time;
+        timePastEnterScene = Time.time;
+
     }
 
     void Update()
     {
 
+        timePastEnterScene += Time.deltaTime;
+        float t_fadefront = Mathf.Clamp01((timePastEnterScene - enterSceneTime - 5.0f) / 5.0f);
+        frontFence.color = Color.Lerp(color1, color2, t_fadefront);
+        frontFence1.color = Color.Lerp(color1, color2, t_fadefront);
+        BG_Front.color = Color.Lerp(color1, color2, t_fadefront);
+        
         curr_time = Time.time;
         if (doWait) {
             if (my_sprinklers != null && doneClimb == false) {
