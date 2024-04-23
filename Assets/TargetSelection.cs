@@ -34,7 +34,7 @@ public class TargetSelection : MonoBehaviour
         }
         forbiddenTiles = new();
         selectedTile = GetRandomTile();
-        print("selectedTile: " + selectedTile + " ");
+        Debug.Log("selectedTile: " + selectedTile + " ");
     }
 
     public void SelectTile(Vector3Int? selected) 
@@ -68,6 +68,7 @@ public class TargetSelection : MonoBehaviour
     public Vector3Int GetRandomTile() 
     {
         Vector3Int selfCellPosition = tilemap.WorldToCell(transform.position);
+        Debug.Log(selfCellPosition);
         int tilesLen = 0;
         for (int x = -range; x <= range; x++)
         {
