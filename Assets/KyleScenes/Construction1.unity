@@ -1357,9 +1357,11 @@ GameObject:
   - component: {fileID: 1487019205}
   - component: {fileID: 1487019204}
   - component: {fileID: 1487019203}
-  - component: {fileID: 1487019202}
-  - component: {fileID: 1487019201}
   - component: {fileID: 1487019200}
+  - component: {fileID: 1487019208}
+  - component: {fileID: 1487019207}
+  - component: {fileID: 1487019209}
+  - component: {fileID: 1487019210}
   m_Layer: 0
   m_Name: Bob
   m_TagString: Untagged
@@ -1388,58 +1390,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1487019201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1487019199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f2ed9a02c87745e4a66d67d15f45a50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathfinding: {fileID: 1487019202}
---- !u!114 &1487019202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1487019199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 447142ec39a164699addd4bda2eee5b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tilemap: {fileID: 0}
-  range: 20
-  debugTile: {fileID: 11400000, guid: 0d986cdf0e65d45728d143223cda0eeb, type: 2}
-  speed: 0.5
-  wetSpeed: 1.25
-  my_sprinklers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  secondTilemap: {fileID: 0}
-  baseSpr: {fileID: 19089775, guid: 88fd6d33bb47d4e86b3379341f09e562, type: 3}
-  climbSpr: {fileID: 21300000, guid: 8d1f637191889464ab49d78e8b985f22, type: 3}
-  baseOfTree: {fileID: 11400000, guid: 44952ec63c8d44994bb8b73ae24aa292, type: 2}
-  restTime: 8
-  targetSelection: {fileID: 1487019203}
-  initialTile: {x: 6, y: -2, z: 0}
-  debugMode: 0
-  my_mirr: {fileID: 0}
-  treefront: {fileID: 0}
-  color1: {r: 1, g: 1, b: 1, a: 1}
-  color2: {r: 1, g: 1, b: 1, a: 0}
-  treeExtVanishTime: 2
-  treeExtSr: {fileID: 0}
-  frontFence: {fileID: 0}
-  frontFence1: {fileID: 0}
-  BG_Front: {fileID: 0}
 --- !u!114 &1487019203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1453,7 +1403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 20
-  tilemap: {fileID: 0}
+  tilemap: {fileID: 310176157}
 --- !u!212 &1487019204
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1548,6 +1498,65 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1487019207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487019199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84f95e3b88f3e412b8a65c219fd8a244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathfinding: {fileID: 1487019208}
+--- !u!114 &1487019208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487019199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d61f687f8e594986b180b4c40ff4497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1487019209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487019199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9529c05d7ad734c89a5d7ddbda63272f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bobOrientationGeneric: {fileID: 1487019207}
+  targetSelection: {fileID: 1487019203}
+  tilemap: {fileID: 310176157}
+  pathfinder: {fileID: 1487019210}
+--- !u!114 &1487019210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487019199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaec936ae6ed8441096613975f085d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSelection: {fileID: 1487019203}
+  initialTile: {x: -11, y: 0, z: 0}
+  tilemap: {fileID: 310176157}
+  debugTile: {fileID: 11400000, guid: 0a3472e7d7a1342288d5e6a0b2b6730b, type: 2}
+  speed: 1
+  debugMode: 0
 --- !u!1 &1771591806
 GameObject:
   m_ObjectHideFlags: 0
