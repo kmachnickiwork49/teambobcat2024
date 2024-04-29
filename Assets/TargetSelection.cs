@@ -37,6 +37,11 @@ public class TargetSelection : MonoBehaviour
         Debug.Log("selectedTile: " + selectedTile + " ");
     }
 
+    public Tilemap GetTilemap()
+    {
+        return tilemap;
+    }
+
     public void SelectTile(Vector3Int? selected) 
     {
         selectedTile = selected;

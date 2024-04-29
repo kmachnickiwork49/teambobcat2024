@@ -8,7 +8,6 @@ public class Pathfinder : MonoBehaviour
 {
     [SerializeField] private TargetSelection targetSelection;
     [SerializeField] private Vector3Int initialTile;
-    [SerializeField] private Tilemap tilemap;
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
     [SerializeField] private bool debugMode;
@@ -34,11 +33,11 @@ public class Pathfinder : MonoBehaviour
         targetTile = targetSelection.GetTarget();
         if (debugMode)
         {
-            originalTile = tilemap.GetTile(targetTile.Value);
-            tilemap.SetTile(targetTile.Value, debugTile);
+            originalTile = tilemap().GetTile(targetTile.Value);
+            tilemap().SetTile(targetTile.Value, debugTile);
         }
         routeTiles = GetRoute(
-		    tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+		    tilemap().WorldToCell(transform.position) - new Vector3Int(0,0,1),
 		    targetTile.Value);
         routeIdx = 0;
     }
@@ -58,20 +57,17 @@ public class Pathfinder : MonoBehaviour
             {
                 if (targetTile.HasValue)
                 {
-                    tilemap.SetTile(targetTile.Value, originalTile);
+                    tilemap().SetTile(targetTile.Value, originalTile);
                 }
                 targetTile = targetSelection.GetTarget();
-                originalTile = tilemap.GetTile(targetTile.Value);
-                tilemap.SetTile(targetTile.Value, debugTile);
+                originalTile = tilemap().GetTile(targetTile.Value);
+                tilemap().SetTile(targetTile.Value, debugTile);
             } else
             {
                 targetTile = targetSelection.GetTarget();
             }
-            //print(transform.position); // 2.5 -0.5 1, exact centered looks correct
-            //print( tilemap.WorldToCell(transform.position) ); // 0 -4 1
             routeTiles = GetRoute(
-		        //tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
-                tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+                tilemap().WorldToCell(transform.position - new Vector3(0,0,1.0f)),
 		        targetTile.Value);
             if (routeTiles == null)
             {
@@ -81,9 +77,9 @@ public class Pathfinder : MonoBehaviour
             routeIdx = 0;
 	    }
 
-        Vector3 nextTileWorld = tilemap.GetCellCenterWorld(routeTiles[routeIdx]);
+        Vector3 nextTileWorld = tilemap().GetCellCenterWorld(routeTiles[routeIdx]);
 
-        Vector3 targetPosition = tilemap.GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
+        Vector3 targetPosition = tilemap().GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
         if (IsCloseTo(nextTileWorld, transform.position)) // xy difference magnitude within threshold
@@ -92,7 +88,6 @@ public class Pathfinder : MonoBehaviour
             return;
         }
     }
-
     private void HandleForbiddenChanged(object sender, EventArgs e)
     {
         if (targetTile.HasValue)
@@ -104,7 +99,7 @@ public class Pathfinder : MonoBehaviour
             }
         }
         routeTiles = GetRoute(
-            tilemap.WorldToCell(transform.position) - new Vector3Int(0, 0, 1), 
+            tilemap().WorldToCell(transform.position) - new Vector3Int(0, 0, 1), 
             targetTile.Value);
         if (routeTiles == null)
         {
@@ -142,7 +137,7 @@ public class Pathfinder : MonoBehaviour
             {
                 Vector3Int neighbor = currentCell + direction;
 
-                if (tilemap.GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor) && 
+                if (tilemap().GetTile(neighbor) != null && !seenFrom.ContainsKey(neighbor) && 
                     !targetSelection.GetForbiddenTiles().Contains(neighbor))
                 {
                     queue.Enqueue(neighbor);
@@ -161,5 +156,10 @@ public class Pathfinder : MonoBehaviour
         Vector2 targetPosition2D = new(targetPosition.x, targetPosition.y);
         float distance = Vector2.Distance(position2D, targetPosition2D);
         return distance <= threshold;
+    }
+
+    private Tilemap tilemap()
+    {
+        return targetSelection.GetTilemap();
     }
 }
