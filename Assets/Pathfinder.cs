@@ -12,6 +12,7 @@ public class Pathfinder : MonoBehaviour
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
     [SerializeField] private bool debugMode;
+    [SerializeField] private bool debug2 = false;
     private List<Vector3Int> routeTiles;
     private int routeIdx;
     private Vector3Int[] directions;
@@ -35,6 +36,9 @@ public class Pathfinder : MonoBehaviour
         if (debugMode)
         {
             originalTile = tilemap.GetTile(targetTile.Value);
+            tilemap.SetTile(targetTile.Value, debugTile);
+        }
+        if (debug2) {
             tilemap.SetTile(targetTile.Value, debugTile);
         }
         routeTiles = GetRoute(
@@ -66,6 +70,9 @@ public class Pathfinder : MonoBehaviour
             } else
             {
                 targetTile = targetSelection.GetTarget();
+                if (debug2) {
+                    tilemap.SetTile(targetTile.Value, debugTile);
+                }
             }
             //print(transform.position); // 2.5 -0.5 1, exact centered looks correct
             //print( tilemap.WorldToCell(transform.position) ); // 0 -4 1
@@ -155,7 +162,7 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.002f)
+    public bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.002f)
     {
         Vector2 position2D = new(position.x, position.y);
         Vector2 targetPosition2D = new(targetPosition.x, targetPosition.y);
