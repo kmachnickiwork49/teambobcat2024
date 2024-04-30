@@ -127,6 +127,7 @@ public class Pathfinder : MonoBehaviour
         while (queue.Count > 0)
         {
             Vector3Int currentCell = queue.Dequeue();
+            //Debug.Log("" + currentCell.ToString());
 
             if (currentCell == targetCell)
             {
