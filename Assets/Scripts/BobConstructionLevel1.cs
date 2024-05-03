@@ -13,7 +13,9 @@ public class BobConstructionLevel1 : MonoBehaviour
     private bool enteredHardhatAnim = false;
     private float hardHatTimer = 0.0f;
         void Start() {
-        targetSelection.setNewTilemap(tilemap);
+        //targetSelection.setNewTilemap(tilemap);
+        // PROBLEM WITH setNewTilemap -> Clears forbiddenTiles, and order of Start() calls matters
+        // Easy solution -> remove setNewTilemap in start, rely on SerializeField
         targetSelection.SelectTile(new Vector3Int(-8,3,0));
         //Debug.Log(targetSelection.GetTarget());
         enteredHardhatAnim = false;

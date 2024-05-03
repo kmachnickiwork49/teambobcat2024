@@ -27,7 +27,8 @@ public class CementMixer : MonoBehaviour
         startPour = false;
         // Have to make sure myCoveredTile is in correct spot
         // Use z = 0
-        targetSelection.ModifyForbiddenTile(myCoveredTile, true);
+        //targetSelection.ModifyForbiddenTile(myCoveredTile, true);
+        targetSelection.ModifyForbiddenTile(tilemap.WorldToCell(transform.position), true);
         if (debugMode) {
             tilemap.SetTile(myCoveredTile, debugTile);
         }
