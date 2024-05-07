@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[System.Serializable]
+public class ListWrapper
+{
+     public List<SpriteRenderer> values;
+}
+
 public class TilemapBrain : MonoBehaviour
 {
     [SerializeField] List<Tilemap> tilemaps;
@@ -12,6 +18,7 @@ public class TilemapBrain : MonoBehaviour
     [SerializeField] TargetSelection bobTargetSelection;
     [SerializeField] Transform bobTransform;
     [SerializeField] int mapIdx = 0;
+    [SerializeField] List<ListWrapper> srs = new();
 
     void Start()
     {
@@ -31,12 +38,28 @@ public class TilemapBrain : MonoBehaviour
         Vector3Int bobTile = tilemaps[mapIdx + 1].WorldToCell(bobTransform.position - new Vector3(0, 0, 1.0f));
         if (tilemaps[mapIdx + 1].HasTile(bobTile))
         {
-            mapIdx += 1;
-            bobTargetSelection.setNewTilemap(tilemaps[mapIdx]);
+            // entered next tilemap
+            bobTargetSelection.setNewTilemap(tilemaps[mapIdx + 1]);
             StartCoroutine(CameraUtils.MoveAndZoomCamera(
-                cameraTransforms[mapIdx - 1].position, cameraTransforms[mapIdx].position,
-                cameraZooms[mapIdx - 1], cameraZooms[mapIdx], 
+                cameraTransforms[mapIdx].position, cameraTransforms[mapIdx + 1].position,
+                cameraZooms[mapIdx], cameraZooms[mapIdx + 1], 
                 cameraMoveDuration));
+            foreach (SpriteRenderer sr in srs[mapIdx].values)
+            {
+                StartCoroutine(ChangeTopLevelOpacity(1f, 0.05f, cameraMoveDuration, sr));
+            }
+            mapIdx += 1;
         }
+    }
+
+    IEnumerator ChangeTopLevelOpacity(float iAlpha, float fAlpha, float duration, SpriteRenderer sr)
+    {
+        for (float t = 0f; t < duration; t += Time.deltaTime)
+        {
+            float normalizedTime = t / duration;
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, iAlpha + (fAlpha - iAlpha) * normalizedTime);
+            yield return null;
+        }
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, fAlpha);
     }
 }
