@@ -52,6 +52,16 @@ public class Pathfinder : MonoBehaviour
         if (routeTiles == null)
         {
             // Bob is dead
+            // Try to pick a new tile
+            targetTile = targetSelection.GetTarget();
+            if (debug2) {
+                tilemap.SetTile(targetTile.Value, debugTile);
+            }
+            routeIdx = 0;
+            routeTiles = GetRoute(
+		        //tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+                tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+		        targetTile.Value);
             return;
         }
 
@@ -83,6 +93,12 @@ public class Pathfinder : MonoBehaviour
             if (routeTiles == null)
             {
                 // Bob is dead
+                // Try to pick a new tile
+                targetTile = targetSelection.GetTarget();
+                if (debug2) {
+                    tilemap.SetTile(targetTile.Value, debugTile);
+                }
+                routeIdx = 0;
                 return;
             }
             routeIdx = 0;

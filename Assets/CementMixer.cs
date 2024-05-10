@@ -19,12 +19,15 @@ public class CementMixer : MonoBehaviour
     [SerializeField] private bool debugMode = false;
     private bool beenClicked = false;
     private bool startPour = false;
-    private float pourTimer = 0.0f;
+    private float pourTimer;
+    private bool donePour1 = false;
     // Start is called before the first frame update
     void Start()
     {
         beenClicked = false;
         startPour = false;
+        donePour1 = false;
+        pourTimer = 0.0f;
         // Have to make sure myCoveredTile is in correct spot
         // Use z = 0
         //targetSelection.ModifyForbiddenTile(myCoveredTile, true);
@@ -37,15 +40,22 @@ public class CementMixer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (beenClicked) {
+        if (beenClicked && !startPour) {
             startPour = true;
             pourTimer = 0.0f;
+            Debug.Log("update registers beenClicked");
         }
         if (startPour) {
-            pourTimer += Time.deltaTime;
-            if (pourTimer >= 3.0f) {
-                foreach (Vector3Int tile in tilesToCover) {
-                    targetSelection.ModifyForbiddenTile(tile, true);
+            if (donePour1 == false) {
+                pourTimer = pourTimer + Time.deltaTime;
+                Debug.Log("pouring" + pourTimer);
+                if (pourTimer >= 3.0f) {
+                    foreach (Vector3Int tile in tilesToCover) {
+                        targetSelection.ModifyForbiddenTile(tile, true);
+                        tilemap.SetTile(tile, debugTile);
+                    }
+                    Debug.Log("donePour1");
+                    donePour1 = true;
                 }
             }
         }

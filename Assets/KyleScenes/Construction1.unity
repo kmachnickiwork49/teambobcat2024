@@ -1221,7 +1221,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7ea5e74d5c734c59b9e7bd7c60aaacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilesToCover: []
+  tilesToCover:
+  - {x: -8, y: 2, z: 0}
+  - {x: -9, y: 3, z: 0}
+  - {x: -9, y: 2, z: 0}
+  - {x: -10, y: 3, z: 0}
+  - {x: -10, y: 2, z: 0}
   myCoveredTile: {x: -8, y: 3, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}
@@ -2115,7 +2120,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7ea5e74d5c734c59b9e7bd7c60aaacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilesToCover: []
+  tilesToCover:
+  - {x: -12, y: 1, z: 0}
+  - {x: -12, y: -1, z: 0}
+  - {x: -11, y: 0, z: 0}
+  - {x: -11, y: 1, z: 0}
+  - {x: -11, y: -1, z: 0}
+  - {x: -10, y: 0, z: 0}
+  - {x: -10, y: 1, z: 0}
+  - {x: -10, y: -1, z: 0}
   myCoveredTile: {x: -12, y: 0, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}
