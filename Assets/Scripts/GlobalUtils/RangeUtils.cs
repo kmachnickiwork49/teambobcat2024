@@ -4,6 +4,16 @@ using UnityEngine;
 
 public static class RangeUtils
 {
+    public static void VisualizePosition(Vector3 pos)
+    {
+        Gizmos.color = Color.red;
+        float size = 0.2f;
+        Vector3 offset1 = new(size, size, 0);
+        Vector3 offset2 = new(size, -size, 0);
+        Gizmos.DrawLine(pos, pos + offset1);
+        Gizmos.DrawLine(pos, pos - offset2);
+    }
+
     public static void VisualizeRange(Transform transform, float range)
     {
         int numSegments = 16;

@@ -7,7 +7,6 @@ using UnityEngine.Tilemaps;
 public class Pathfinder : MonoBehaviour
 {
     [SerializeField] private TargetSelection targetSelection;
-    [SerializeField] private Vector3Int initialTile;
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
     [SerializeField] private bool debugMode;
@@ -19,6 +18,11 @@ public class Pathfinder : MonoBehaviour
 
     private void Start()
     {
+        Reset();
+    }
+
+    public void Reset()
+    {
         targetSelection.onForbiddenChanged += HandleForbiddenChanged;
         routeTiles = new List<Vector3Int>(); //starts off empty
         directions = new Vector3Int[]
@@ -29,7 +33,7 @@ public class Pathfinder : MonoBehaviour
                 new Vector3Int(-1, 0, 0),
           };
 
-        targetSelection.SelectTile(initialTile);
+        targetSelection.SelectTile(tilemap().WorldToCell(transform.position) - new Vector3Int(0,0,1));
         targetTile = targetSelection.GetTarget();
         if (debugMode)
         {

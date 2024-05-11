@@ -19,20 +19,20 @@ public class TargetSelection : MonoBehaviour
         candidateTiles = new List<Vector3Int>();
         for (int x = -range; x <= range; x++) {
             for (int y = -range; y <= range; y++) {
-                candidateTiles.Add(new Vector3Int(-1,-1,-1));
+                candidateTiles.Add(new Vector3Int(-1,-1,-1)); // placeholder tiles
             }
         }
     }
 
-    public void setNewTilemap(Tilemap tm) {
+    public void setNewTilemap(Tilemap tm, List<Vector3Int> forbiddenTiles = default) {
         tilemap = tm;
         candidateTiles = new List<Vector3Int>();
         for (int x = -range; x <= range; x++) {
             for (int y = -range; y <= range; y++) {
-                candidateTiles.Add(new Vector3Int(-1,-1,-1));
+                candidateTiles.Add(new Vector3Int(-1,-1,-1)); // placeholder tiles
             }
         }
-        forbiddenTiles = new();
+        this.forbiddenTiles = new HashSet<Vector3Int>(forbiddenTiles);
         selectedTile = GetRandomTile();
         Debug.Log("selectedTile: " + selectedTile + " ");
     }
@@ -73,7 +73,6 @@ public class TargetSelection : MonoBehaviour
     public Vector3Int GetRandomTile() 
     {
         Vector3Int selfCellPosition = tilemap.WorldToCell(transform.position);
-        Debug.Log(selfCellPosition);
         int tilesLen = 0;
         for (int x = -range; x <= range; x++)
         {
