@@ -17,6 +17,7 @@ public class CementMixer : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tile debugTile;
     [SerializeField] private bool debugMode = false;
+    [SerializeField] private float pourPeriod = 2.0f;
     private bool beenClicked = false;
     private bool startPour = false;
     private float pourTimer;
@@ -47,6 +48,7 @@ public class CementMixer : MonoBehaviour
         }
         if (startPour) {
             if (donePour1 == false) {
+                /*
                 pourTimer = pourTimer + Time.deltaTime;
                 Debug.Log("pouring" + pourTimer);
                 if (pourTimer >= 3.0f) {
@@ -59,6 +61,9 @@ public class CementMixer : MonoBehaviour
                     Debug.Log("donePour1");
                     donePour1 = true;
                 }
+                */
+                StartCoroutine(PourRoutine(tilesToCover));
+                donePour1 = true;
             }
         }
     }
@@ -67,4 +72,16 @@ public class CementMixer : MonoBehaviour
         beenClicked = true;
         Debug.Log("Start pouring");
     }
+
+    IEnumerator PourRoutine(Vector3Int[] tilesToCover)
+   {
+        foreach (Vector3Int tile in tilesToCover) {
+            yield return new WaitForSeconds(pourPeriod);
+            Debug.Log("poured");
+            targetSelection.ModifyForbiddenTile(tile, true);
+            if (debugMode) {
+                tilemap.SetTile(tile, debugTile);
+            }
+        }
+   }
 }

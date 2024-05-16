@@ -1601,10 +1601,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesToCover:
-  - {x: -8, y: -7, z: 0}
-  - {x: -9, y: -7, z: 0}
-  - {x: -10, y: -7, z: 0}
   - {x: -11, y: -7, z: 0}
+  - {x: -10, y: -7, z: 0}
+  - {x: -9, y: -7, z: 0}
+  - {x: -8, y: -7, z: 0}
   myCoveredTile: {x: -12, y: -7, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}
@@ -2128,10 +2128,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesToCover:
-  - {x: -8, y: 0, z: 0}
-  - {x: -9, y: 0, z: 0}
-  - {x: -10, y: 0, z: 0}
   - {x: -11, y: 0, z: 0}
+  - {x: -10, y: 0, z: 0}
+  - {x: -9, y: 0, z: 0}
+  - {x: -8, y: 0, z: 0}
   myCoveredTile: {x: -12, y: 0, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}
