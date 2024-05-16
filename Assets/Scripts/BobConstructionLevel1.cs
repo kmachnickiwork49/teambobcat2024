@@ -10,6 +10,7 @@ public class BobConstructionLevel1 : MonoBehaviour
     [SerializeField] private TargetSelection targetSelection;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Pathfinder pathfinder;
+    [SerializeField] private CementMixer[] myCMs;
     private bool enteredHardhatAnim = false;
     private float hardHatTimer = 0.0f;
         void Start() {
@@ -53,6 +54,9 @@ public class BobConstructionLevel1 : MonoBehaviour
         }
         // Done with hard hat animation
         //Debug.Log("done with hard hat anim");
+        foreach (CementMixer cm in myCMs) {
+            cm.setCanPour(true);
+        }
         //targetSelection.SelectTile(new Vector3Int(-8,3,0));
         //Debug.Log(transform.position);
         //if (tilemap.GetCellCenterWorld(transform.position).Y < -8.0f) {

@@ -22,6 +22,7 @@ public class CementMixer : MonoBehaviour
     private bool startPour = false;
     private float pourTimer;
     private bool donePour1 = false;
+    private bool canPour = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,12 +42,12 @@ public class CementMixer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (beenClicked && !startPour) {
+        if (beenClicked && !startPour && canPour) {
             startPour = true;
             pourTimer = 0.0f;
-            Debug.Log("update registers beenClicked");
+            //Debug.Log("update registers beenClicked");
         }
-        if (startPour) {
+        if (startPour && canPour) {
             if (donePour1 == false) {
                 /*
                 pourTimer = pourTimer + Time.deltaTime;
@@ -70,18 +71,22 @@ public class CementMixer : MonoBehaviour
 
     void OnMouseDown() {
         beenClicked = true;
-        Debug.Log("Start pouring");
+        //Debug.Log("Start pouring");
     }
 
     IEnumerator PourRoutine(Vector3Int[] tilesToCover)
    {
         foreach (Vector3Int tile in tilesToCover) {
-            yield return new WaitForSeconds(pourPeriod);
             Debug.Log("poured");
             targetSelection.ModifyForbiddenTile(tile, true);
             if (debugMode) {
                 tilemap.SetTile(tile, debugTile);
             }
+            yield return new WaitForSeconds(pourPeriod);
         }
+   }
+
+   public void setCanPour(bool a) {
+        canPour = a;
    }
 }
