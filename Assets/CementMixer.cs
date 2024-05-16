@@ -52,7 +52,9 @@ public class CementMixer : MonoBehaviour
                 if (pourTimer >= 3.0f) {
                     foreach (Vector3Int tile in tilesToCover) {
                         targetSelection.ModifyForbiddenTile(tile, true);
-                        tilemap.SetTile(tile, debugTile);
+                        if (debugMode) {
+                            tilemap.SetTile(tile, debugTile);
+                        }
                     }
                     Debug.Log("donePour1");
                     donePour1 = true;
