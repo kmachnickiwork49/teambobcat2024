@@ -1223,9 +1223,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilesToCover:
   - {x: -9, y: 3, z: 0}
-  - {x: -10, y: 3, z: 0}
-  - {x: -11, y: 3, z: 0}
-  - {x: -12, y: 3, z: 0}
+  - {x: -9, y: 2, z: 0}
+  - {x: -8, y: 2, z: 0}
+  - {x: -8, y: 1, z: 0}
+  - {x: -9, y: 1, z: 0}
+  - {x: -10, y: 1, z: 0}
+  - {x: -9, y: 2, z: 0}
   myCoveredTile: {x: -8, y: 3, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}
@@ -1605,7 +1608,10 @@ MonoBehaviour:
   - {x: -11, y: -7, z: 0}
   - {x: -10, y: -7, z: 0}
   - {x: -9, y: -7, z: 0}
+  - {x: -9, y: -6, z: 0}
   - {x: -8, y: -7, z: 0}
+  - {x: -10, y: -6, z: 0}
+  - {x: -10, y: -5, z: 0}
   myCoveredTile: {x: -12, y: -7, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}
@@ -1762,8 +1768,12 @@ MonoBehaviour:
   tilesToCover:
   - {x: -9, y: -3, z: 0}
   - {x: -10, y: -3, z: 0}
+  - {x: -10, y: -4, z: 0}
   - {x: -11, y: -3, z: 0}
+  - {x: -11, y: -4, z: 0}
   - {x: -12, y: -3, z: 0}
+  - {x: -12, y: -4, z: 0}
+  - {x: -12, y: -5, z: 0}
   myCoveredTile: {x: -8, y: -3, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}
@@ -2015,7 +2025,7 @@ MonoBehaviour:
   debugTile: {fileID: 11400000, guid: 0a3472e7d7a1342288d5e6a0b2b6730b, type: 2}
   speed: 1
   debugMode: 0
-  debug2: 1
+  debug2: 0
 --- !u!114 &1487019211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2037,6 +2047,55 @@ MonoBehaviour:
   - {fileID: 1530951741}
   - {fileID: 1316353270}
   - {fileID: 1083258742}
+  toDel:
+  - {x: -12, y: 3, z: 0}
+  - {x: -12, y: 2, z: 0}
+  - {x: -12, y: 1, z: 0}
+  - {x: -12, y: -2, z: 0}
+  - {x: -12, y: -3, z: 0}
+  - {x: -12, y: -4, z: 0}
+  - {x: -12, y: -5, z: 0}
+  - {x: -12, y: -6, z: 0}
+  - {x: -11, y: 2, z: 0}
+  - {x: -11, y: 1, z: 0}
+  - {x: -11, y: 0, z: 0}
+  - {x: -11, y: -1, z: 0}
+  - {x: -11, y: -2, z: 0}
+  - {x: -11, y: -3, z: 0}
+  - {x: -11, y: -4, z: 0}
+  - {x: -11, y: -5, z: 0}
+  - {x: -11, y: -6, z: 0}
+  - {x: -11, y: -7, z: 0}
+  - {x: -10, y: 1, z: 0}
+  - {x: -10, y: 0, z: 0}
+  - {x: -10, y: -1, z: 0}
+  - {x: -10, y: -2, z: 0}
+  - {x: -10, y: -3, z: 0}
+  - {x: -10, y: -4, z: 0}
+  - {x: -10, y: -5, z: 0}
+  - {x: -10, y: -6, z: 0}
+  - {x: -10, y: -7, z: 0}
+  - {x: -9, y: 3, z: 0}
+  - {x: -9, y: 2, z: 0}
+  - {x: -9, y: 1, z: 0}
+  - {x: -9, y: 0, z: 0}
+  - {x: -9, y: -1, z: 0}
+  - {x: -9, y: -2, z: 0}
+  - {x: -9, y: -3, z: 0}
+  - {x: -9, y: -4, z: 0}
+  - {x: -9, y: -5, z: 0}
+  - {x: -9, y: -6, z: 0}
+  - {x: -9, y: -7, z: 0}
+  - {x: -8, y: 2, z: 0}
+  - {x: -8, y: 1, z: 0}
+  - {x: -8, y: 0, z: 0}
+  - {x: -8, y: -1, z: 0}
+  - {x: -8, y: -2, z: 0}
+  - {x: -8, y: -3, z: 0}
+  - {x: -8, y: -6, z: 0}
+  - {x: -8, y: -7, z: 0}
+  debugMode1: 1
+  debugTile: {fileID: 11400000, guid: 1983a99f96bc24824a020d98f3315c5f, type: 2}
 --- !u!1 &1530951738
 GameObject:
   m_ObjectHideFlags: 0
@@ -2138,8 +2197,10 @@ MonoBehaviour:
   tilesToCover:
   - {x: -11, y: 0, z: 0}
   - {x: -10, y: 0, z: 0}
-  - {x: -9, y: 0, z: 0}
-  - {x: -8, y: 0, z: 0}
+  - {x: -11, y: 0, z: 0}
+  - {x: -11, y: -1, z: 0}
+  - {x: -10, y: -1, z: 0}
+  - {x: -10, y: -2, z: 0}
   myCoveredTile: {x: -12, y: 0, z: 0}
   targetSelection: {fileID: 1487019203}
   tilemap: {fileID: 310176157}

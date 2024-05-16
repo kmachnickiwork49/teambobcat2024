@@ -78,7 +78,8 @@ public class CementMixer : MonoBehaviour
    {
         foreach (Vector3Int tile in tilesToCover) {
             Debug.Log("poured");
-            targetSelection.ModifyForbiddenTile(tile, true);
+            // Change to Bob wants to walk on wet cement
+            targetSelection.ModifyForbiddenTile(tile, false);
             if (debugMode) {
                 tilemap.SetTile(tile, debugTile);
             }

@@ -11,7 +11,11 @@ public class BobConstructionLevel1 : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Pathfinder pathfinder;
     [SerializeField] private CementMixer[] myCMs;
+    [SerializeField] private Vector3Int[] toDel;
+    [SerializeField] private bool debugMode1 = false;
+    [SerializeField] private Tile debugTile;
     private bool enteredHardhatAnim = false;
+    private bool doneHardhatAnim = false;
     private float hardHatTimer = 0.0f;
         void Start() {
         //targetSelection.setNewTilemap(tilemap);
@@ -54,9 +58,19 @@ public class BobConstructionLevel1 : MonoBehaviour
         }
         // Done with hard hat animation
         //Debug.Log("done with hard hat anim");
-        foreach (CementMixer cm in myCMs) {
-            cm.setCanPour(true);
+        if (doneHardhatAnim == false) {
+            // Do this once
+            foreach (CementMixer cm in myCMs) {
+                cm.setCanPour(true);
+            }
+            foreach (Vector3Int tile in toDel) {
+                targetSelection.ModifyForbiddenTile(tile, true);
+                if (debugMode1) {
+                    tilemap.SetTile(tile, debugTile);
+                }
+            }
         }
+        doneHardhatAnim = true;
         //targetSelection.SelectTile(new Vector3Int(-8,3,0));
         //Debug.Log(transform.position);
         //if (tilemap.GetCellCenterWorld(transform.position).Y < -8.0f) {
