@@ -100,4 +100,8 @@ public class TargetSelection : MonoBehaviour
         Vector3Int chosenTile = candidateTiles[UnityEngine.Random.Range(0, tilesLen)];
         return chosenTile;
     }
+
+    public void SetRange(int rng) {
+        range = rng;
+    }
 }

@@ -11,6 +11,7 @@ public class Pathfinder : MonoBehaviour
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
     [SerializeField] private bool debugMode;
+    [SerializeField] private bool debug2 = false;
     private List<Vector3Int> routeTiles;
     private int routeIdx;
     private Vector3Int[] directions;
@@ -36,6 +37,9 @@ public class Pathfinder : MonoBehaviour
             originalTile = tilemap().GetTile(targetTile.Value);
             tilemap().SetTile(targetTile.Value, debugTile);
         }
+        if (debug2) {
+            tilemap.SetTile(targetTile.Value, debugTile);
+        }
         routeTiles = GetRoute(
 		    tilemap().WorldToCell(transform.position) - new Vector3Int(0,0,1),
 		    targetTile.Value);
@@ -47,6 +51,16 @@ public class Pathfinder : MonoBehaviour
         if (routeTiles == null)
         {
             // Bob is dead
+            // Try to pick a new tile
+            targetTile = targetSelection.GetTarget();
+            if (debug2) {
+                tilemap.SetTile(targetTile.Value, debugTile);
+            }
+            routeIdx = 0;
+            routeTiles = GetRoute(
+		        //tilemap.WorldToCell(transform.position) - new Vector3Int(0,0,1),
+                tilemap.WorldToCell(transform.position - new Vector3(0,0,1.0f)),
+		        targetTile.Value);
             return;
         }
 
@@ -65,6 +79,9 @@ public class Pathfinder : MonoBehaviour
             } else
             {
                 targetTile = targetSelection.GetTarget();
+                if (debug2) {
+                    tilemap.SetTile(targetTile.Value, debugTile);
+                }
             }
             routeTiles = GetRoute(
                 tilemap().WorldToCell(transform.position - new Vector3(0,0,1.0f)),
@@ -72,6 +89,12 @@ public class Pathfinder : MonoBehaviour
             if (routeTiles == null)
             {
                 // Bob is dead
+                // Try to pick a new tile
+                targetTile = targetSelection.GetTarget();
+                if (debug2) {
+                    tilemap.SetTile(targetTile.Value, debugTile);
+                }
+                routeIdx = 0;
                 return;
             }
             routeIdx = 0;
@@ -115,6 +138,7 @@ public class Pathfinder : MonoBehaviour
         while (queue.Count > 0)
         {
             Vector3Int currentCell = queue.Dequeue();
+            //Debug.Log("" + currentCell.ToString());
 
             if (currentCell == targetCell)
             {
@@ -150,7 +174,7 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-    bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.002f)
+    public bool IsCloseTo(Vector3 position, Vector3 targetPosition, float threshold=0.002f)
     {
         Vector2 position2D = new(position.x, position.y);
         Vector2 targetPosition2D = new(targetPosition.x, targetPosition.y);
