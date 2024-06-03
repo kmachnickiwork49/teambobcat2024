@@ -56,7 +56,8 @@ public class TutorialMirrorScript : MonoBehaviour
                 //Destroy(targetSelection);
             }
             if (currTime - startCrash > 5.0f) {
-                SceneManager.LoadScene("TutorialFinish");
+                //SceneManager.LoadScene("TutorialFinish");
+                SceneManager.LoadScene("ConstructionLevelOne");
             }
         }
     }

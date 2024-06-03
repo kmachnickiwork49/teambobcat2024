@@ -8,6 +8,7 @@ public class BobOrientationGeneric : MonoBehaviour
     [SerializeField] AnimatorControllerParameter downLeft;
     Animator animator;
     [SerializeField] BobReportMovement pathfinding;
+    [SerializeField] float xscale = 0.1f;
 
     void Start()
     {
@@ -19,7 +20,7 @@ public class BobOrientationGeneric : MonoBehaviour
         animator.SetBool("movingUp", pathfinding.GetMovingUp());
         animator.SetBool("stopped", pathfinding.GetStopped());
         transform.localScale = new(
-            0.1f * (pathfinding.GetMovingRight() ? -1 : 1),
+            xscale * (pathfinding.GetMovingRight() ? -1 : 1),
             transform.localScale.y,
             1);
     }

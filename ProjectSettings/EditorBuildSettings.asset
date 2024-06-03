@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/FINALScenes/TutorialLevelWinterDemo.unity
     guid: d83797ca97c5d4b19828897deace2061
   - enabled: 1
+    path: Assets/FINALScenes/ConstructionLevelOne.unity
+    guid: f96137b8b6d0b4af994dbcbec37c6ca9
+  - enabled: 1
+    path: Assets/FINALScenes/ConstructionLevelTwo.unity
+    guid: c53b9ba58a0964cf7929761cb9058419
+  - enabled: 1
     path: Assets/FINALScenes/TutorialFinish.unity
     guid: 6ed2e192bddd14f2289542495aadaeae
   m_configObjects: {}

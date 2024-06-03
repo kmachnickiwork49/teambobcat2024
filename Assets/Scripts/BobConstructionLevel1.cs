@@ -97,6 +97,6 @@ public class BobConstructionLevel1 : MonoBehaviour
 
     IEnumerator GoConstructionLevelTwo() { 
         yield return new WaitForSeconds(5);
-        SceneManager.LoadScene("OtherSceneName");
+        SceneManager.LoadScene("ConstructionLevelTwo");
     }
 }
