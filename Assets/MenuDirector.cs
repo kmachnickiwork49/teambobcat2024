@@ -23,7 +23,7 @@ public class MenuDirector : MonoBehaviour
     }
 
     public void Play() { 
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync("TutorialLevelWinterDemo");
     }
 
     public void Quit()

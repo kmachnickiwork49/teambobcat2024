@@ -26,6 +26,10 @@ public class TutorialMirrorScript : MonoBehaviour
 
     private Vector3Int my_targ;
 
+    [SerializeField] private Color color1;
+    [SerializeField] private Color color2;
+    private SpriteRenderer my_glow;
+
     public Vector3Int GetMyTarg() {
         if (angleIndex == 0) { return targetSelection.GetRandomTile(); }
         return my_targ;
@@ -33,6 +37,11 @@ public class TutorialMirrorScript : MonoBehaviour
 
     public bool doingChase() {
         return (angleIndex > 0);
+    }
+
+    void Start() {
+        my_glow = transform.Find("Glow").gameObject.GetComponent<SpriteRenderer>();
+        StartCoroutine(GlowRoutine());
     }
 
     void Update() {
@@ -51,6 +60,15 @@ public class TutorialMirrorScript : MonoBehaviour
             }
         }
     }
+
+    IEnumerator GlowRoutine()
+   {
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < 100; i++) {
+            my_glow.color = Color.Lerp(color1, color2, Mathf.Clamp01(i / 100.0f));
+            yield return new WaitForSeconds(0.05f);
+        }
+   }
 
     void OnMouseDown() {
         Debug.Log("mouse clicked on mirror");
