@@ -23,6 +23,8 @@ public class CementMixer : MonoBehaviour
     private float pourTimer;
     private bool donePour1 = false;
     private bool canPour = false;
+    [SerializeField] private GameObject my_glow;
+    [SerializeField] private GameObject wet_cement_tile_prefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -75,19 +77,24 @@ public class CementMixer : MonoBehaviour
     }
 
     IEnumerator PourRoutine(Vector3Int[] tilesToCover)
-   {
-        foreach (Vector3Int tile in tilesToCover) {
-            Debug.Log("poured");
-            // Change to Bob wants to walk on wet cement
-            targetSelection.ModifyForbiddenTile(tile, false);
-            if (debugMode) {
-                tilemap.SetTile(tile, debugTile);
+    {
+            foreach (Vector3Int tile in tilesToCover) {
+                Debug.Log("poured");
+                // Change to Bob wants to walk on wet cement
+                targetSelection.ModifyForbiddenTile(tile, false);
+                if (debugMode) {
+                    tilemap.SetTile(tile, debugTile);
+                }
+                Instantiate(wet_cement_tile_prefab, tilemap.GetCellCenterWorld(tile), Quaternion.identity);
+                yield return new WaitForSeconds(pourPeriod);
             }
-            yield return new WaitForSeconds(pourPeriod);
-        }
-   }
+    }
 
-   public void setCanPour(bool a) {
+    public void setCanPour(bool a) {
         canPour = a;
-   }
+    }
+
+    public void activateGlow() {
+        my_glow.SetActive(true);
+    }
 }

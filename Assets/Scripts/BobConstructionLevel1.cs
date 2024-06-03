@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class BobConstructionLevel1 : MonoBehaviour
 {
@@ -14,9 +15,11 @@ public class BobConstructionLevel1 : MonoBehaviour
     [SerializeField] private Vector3Int[] toDel;
     [SerializeField] private bool debugMode1 = false;
     [SerializeField] private Tile debugTile;
+    [SerializeField] private GameObject level1plank;
     private bool enteredHardhatAnim = false;
     private bool doneHardhatAnim = false;
     private float hardHatTimer = 0.0f;
+    private bool doneWinCon = false;
         void Start() {
         //targetSelection.setNewTilemap(tilemap);
         // PROBLEM WITH setNewTilemap -> Clears forbiddenTiles, and order of Start() calls matters
@@ -62,6 +65,7 @@ public class BobConstructionLevel1 : MonoBehaviour
             // Do this once
             foreach (CementMixer cm in myCMs) {
                 cm.setCanPour(true);
+                cm.activateGlow();
             }
             foreach (Vector3Int tile in toDel) {
                 targetSelection.ModifyForbiddenTile(tile, true);
@@ -69,8 +73,10 @@ public class BobConstructionLevel1 : MonoBehaviour
                     tilemap.SetTile(tile, debugTile);
                 }
             }
+            level1plank.SetActive(false);
         }
         doneHardhatAnim = true;
+
         //targetSelection.SelectTile(new Vector3Int(-8,3,0));
         //Debug.Log(transform.position);
         //if (tilemap.GetCellCenterWorld(transform.position).Y < -8.0f) {
@@ -82,6 +88,15 @@ public class BobConstructionLevel1 : MonoBehaviour
             pathfinder.IsCloseTo(transform.position, tilemap.GetCellCenterWorld(new Vector3Int(-12,-8,1)))
         ) {
             Debug.Log("win! go next puzzle");
+            if (!doneWinCon) {
+                StartCoroutine(GoConstructionLevelTwo());
+                doneWinCon = true;
+            }
         }
+    }
+
+    IEnumerator GoConstructionLevelTwo() { 
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene("OtherSceneName");
     }
 }
