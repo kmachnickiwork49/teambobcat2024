@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1993934411513903802}
   - component: {fileID: 8166055460995383281}
-  - component: {fileID: 2478757492748356977}
   m_Layer: 0
   m_Name: WetSpot
   m_TagString: Untagged
@@ -85,17 +84,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2478757492748356977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6962508422059552529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13e467558ff0f42429eba914501e8a0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onColor: {r: 0, g: 0, b: 0.5, a: 0.08627451}
-  transitionTime: 5
