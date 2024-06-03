@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum BobState
 {
@@ -14,8 +15,10 @@ public class BobBrain : MonoBehaviour
     [SerializeField] float workerRange;
     [SerializeField] float shakeDuration;
     [SerializeField] MoveTowards moveTowardsStart;
+    [SerializeField] TargetSelection targetSelection;
     [SerializeField] Pathfinder pathFinder;
     BobState state;
+    bool jackhammersDisabled = false;
 
     private void OnDrawGizmos()
     {
@@ -32,6 +35,7 @@ public class BobBrain : MonoBehaviour
         switch (state)
         {
             case BobState.PATHFIND:
+                if (jackhammersDisabled) break;
                 GameObject[] workers = GameObject.FindGameObjectsWithTag("Scary");
                 foreach (GameObject worker in workers)
                 {
@@ -67,5 +71,10 @@ public class BobBrain : MonoBehaviour
         {
             moveTowardsStart.Enable((_) => { InPathfind(); });
         });
+    }
+
+    public void DisableJackhammers()
+    {
+        jackhammersDisabled = true;
     }
 }
