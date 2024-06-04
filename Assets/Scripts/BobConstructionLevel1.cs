@@ -40,6 +40,8 @@ public class BobConstructionLevel1 : MonoBehaviour
     void Update() {
         //targetSelection.SelectTile(new Vector3Int(-4,2,0));
         //targetSelection.SelectTile(new Vector3Int(-4,3,0));
+        //Debug.Log(targetSelection.GetTarget());
+        //targetSelection.SelectTile(new Vector3Int(-8,3,0));
         if (!enteredHardhatAnim && pathfinder.IsCloseTo(transform.position, tilemap.GetCellCenterWorld(new Vector3Int(-10,3,0)), 0.002f) == true) {
             //pathfinder.SetActive(false);
             //targetSelection.SetActive(false);

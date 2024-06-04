@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class Pathfinder : MonoBehaviour
 {
     [SerializeField] private TargetSelection targetSelection;
+    [SerializeField] private Vector3Int initialTile;
     [SerializeField] private TileBase debugTile;
     [SerializeField] private float speed;
     [SerializeField] private bool debugMode;
@@ -16,6 +17,11 @@ public class Pathfinder : MonoBehaviour
     private Vector3Int[] directions;
     private Vector3Int? targetTile;
     private TileBase originalTile;
+
+    bool movingRight = false;
+    bool movingUp = false;
+
+    [SerializeField] private BobReportMovement brm;
 
     private void Start()
     {
@@ -35,6 +41,7 @@ public class Pathfinder : MonoBehaviour
           };
 
         targetSelection.SelectTile(tilemap().WorldToCell(transform.position) - new Vector3Int(0,0,1));
+        if (initialTile != new Vector3(0,0,0)) { targetSelection.SelectTile(initialTile); }
         targetTile = targetSelection.GetTarget();
         if (debugMode)
         {
@@ -107,6 +114,14 @@ public class Pathfinder : MonoBehaviour
         Vector3 nextTileWorld = tilemap().GetCellCenterWorld(routeTiles[routeIdx]);
 
         Vector3 targetPosition = tilemap().GetCellCenterWorld(routeTiles[routeIdx]) + new Vector3(0, 0, 1);
+        Vector3 direction = targetPosition - transform.position;
+        movingRight = direction.x > 0;
+        movingUp = direction.y > 0;
+        if (brm != null) {
+            brm.SetMovingRight(movingRight);
+            brm.SetMovingUp(movingUp);
+            brm.SetStopped(false);
+        }
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
         if (IsCloseTo(nextTileWorld, transform.position)) // xy difference magnitude within threshold

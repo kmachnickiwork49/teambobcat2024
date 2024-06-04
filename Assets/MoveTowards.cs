@@ -11,6 +11,9 @@ public class MoveTowards : MonoBehaviour
     [SerializeField] float followDistance = 0.001f;
     [SerializeField] float range;
     [SerializeField] bool debugMode = true;
+
+    [SerializeField] BobReportMovement brm;
+
     float currentSpeed;
     bool isEnabled = false;
     Action<bool> onStop;
@@ -39,6 +42,14 @@ public class MoveTowards : MonoBehaviour
         Vector3 movement = desiredSpeed * Time.deltaTime * direction.normalized;
         transform.position += movement;
         currentSpeed = desiredSpeed;
+
+        bool movingRight = direction.x > 0;
+        bool movingUp = direction.y > 0;
+        if (brm != null) {
+            brm.SetMovingRight(movingRight);
+            brm.SetMovingUp(movingUp);
+            brm.SetStopped(false);
+        }
     }
 
     public bool TargetInRange()

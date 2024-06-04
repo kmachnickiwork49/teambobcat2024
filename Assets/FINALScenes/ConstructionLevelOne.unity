@@ -3319,7 +3319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSelection: {fileID: 1487019203}
-  initialTile: {x: -10, y: 3, z: 0}
+  initialTile: {x: -8, y: 3, z: 0}
   debugTile: {fileID: 11400000, guid: 0a3472e7d7a1342288d5e6a0b2b6730b, type: 2}
   speed: 1
   debugMode: 0

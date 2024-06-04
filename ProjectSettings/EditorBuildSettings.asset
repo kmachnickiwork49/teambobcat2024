@@ -19,6 +19,9 @@ EditorBuildSettings:
     guid: f96137b8b6d0b4af994dbcbec37c6ca9
   - enabled: 1
     path: Assets/FINALScenes/ConstructionLevelTwo.unity
+    guid: 1004f82b9b3164f27be052b83fc82dc8
+  - enabled: 0
+    path: Assets/FINALScenes/ConstructionLevelTwoOLD.unity
     guid: c53b9ba58a0964cf7929761cb9058419
   - enabled: 1
     path: Assets/FINALScenes/TutorialFinish.unity
