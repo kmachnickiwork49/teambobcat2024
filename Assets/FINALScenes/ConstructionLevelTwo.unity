@@ -860,6 +860,7 @@ MonoBehaviour:
   followDistance: 0.001
   range: 20
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!114 &305124218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,6 +879,7 @@ MonoBehaviour:
   followDistance: 0.5
   range: 5.3
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!61 &305124219
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4897,6 +4899,7 @@ MonoBehaviour:
   followDistance: 0.001
   range: 20
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!114 &816474322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4915,6 +4918,7 @@ MonoBehaviour:
   followDistance: 0.5
   range: 5.3
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!61 &816474323
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5201,6 +5205,7 @@ MonoBehaviour:
   followDistance: 0.5
   range: 5.3
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!114 &852631324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5241,6 +5246,7 @@ MonoBehaviour:
   followDistance: 0.001
   range: 20
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!1 &855181141
 GameObject:
   m_ObjectHideFlags: 0
@@ -7266,6 +7272,7 @@ MonoBehaviour:
   followDistance: 0.001
   range: 20
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!114 &1224156072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7284,6 +7291,7 @@ MonoBehaviour:
   followDistance: 0.5
   range: 5.3
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!61 &1224156073
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8135,6 +8143,7 @@ MonoBehaviour:
   followDistance: 0.001
   range: 20
   debugMode: 0
+  brm: {fileID: 1487019211}
 --- !u!114 &1487019211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13019,6 +13028,7 @@ MonoBehaviour:
   followDistance: 0.001
   range: 20
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!114 &1777074100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13037,6 +13047,7 @@ MonoBehaviour:
   followDistance: 0.5
   range: 5.3
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!61 &1777074101
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13984,6 +13995,7 @@ MonoBehaviour:
   followDistance: 0.001
   range: 20
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!114 &2042417764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14002,6 +14014,7 @@ MonoBehaviour:
   followDistance: 0.5
   range: 5.3
   debugMode: 0
+  brm: {fileID: 0}
 --- !u!61 &2042417765
 BoxCollider2D:
   m_ObjectHideFlags: 0

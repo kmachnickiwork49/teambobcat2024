@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class TilemapInfo
@@ -99,8 +100,17 @@ public class TilemapBrain : MonoBehaviour
                 mapIdx += 1;
                 inTransition = false;
                 bobPathfinder.Reset();
+
+                if (mapIdx == 1) { StartCoroutine(FinishGame()); }
+
             }));
         }
+    }
+
+    IEnumerator FinishGame() {
+        Debug.Log("finish game");
+        yield return new WaitForSeconds(15);
+        SceneManager.LoadScene("TutorialFinish");
     }
 
     IEnumerator InitiateBobLight()
